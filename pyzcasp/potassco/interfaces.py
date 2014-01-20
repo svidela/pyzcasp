@@ -27,3 +27,18 @@ class IClaspSolver(asp.ISolver):
     """
     clasp solver
     """
+
+class IClaspHSolver(IClaspSolver):
+    """
+    hclasp solver
+    """
+
+class IClaspDSolver(IClaspSolver):
+    """
+    claspD solver
+    """
+    
+class IClaspSubsetMinimalSolver(asp.ISubsetMinimalSolver):
+    """
+    Marker interface for clasp subset minimal solver
+    """

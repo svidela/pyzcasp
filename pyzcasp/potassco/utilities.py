@@ -73,11 +73,13 @@ class ClaspSolver(asp.Process):
         return atoms
                 
 class ClaspHSolver(ClaspSolver):
+    interface.implements(IClaspHSolver, IClaspSubsetMinimalSolver)
     
     def __filteratoms__(self, atoms):
         filter(lambda atom: not atom.startswith('_'), atoms)
     
 class ClaspDSolver(ClaspSolver):
+    interface.implements(IClaspDSolver, IClaspSubsetMinimalSolver)
     
     def __getstats__(self):
         return self.json['Models']
