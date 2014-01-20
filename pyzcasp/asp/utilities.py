@@ -82,4 +82,19 @@ class EncodingRegistry(object):
             return self.__registry[name]
         except KeyError,e:
             raise KeyError("No encoding registered with name %s" % e)
+            
+            
+class Cleaner(object):
+    interface.implements(ICleaner)
+    
+    def __init__(self):
+        super(Cleaner, self).__init__()
+        self.__files = set()
         
+    def collect_file(self, filename):
+        self.__files.add(filename)
+    
+    def clean_files(self):
+        for filename in self.__files:
+            os.unlink(filename)
+            

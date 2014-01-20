@@ -17,7 +17,7 @@
 # -*- coding: utf-8 -*-
 
 import os, tempfile
-
+from zope import component
 from ply import lex
 
 from interfaces import *
@@ -70,6 +70,8 @@ class TermSet(set):
         else:
             fd, filename = tempfile.mkstemp('.lp')
             file = os.fdopen(fd,'w')
+            cleaner = component.getUtility(ICleaner)
+            cleaner.collect_file(filename)
             
         for term in self:
             file.write(str(term) + '.\n')
@@ -131,4 +133,11 @@ class Lexer(object):
         print "Illegal character '%s'" % t.value[0]
         t.lexer.skip(1)
 
-        
+
+def cleanrun(fn):
+    def decorator(*args, **kwargs):
+        fn(*args, **kwargs)
+        cleaner = component.getUtility(ICleaner)
+        cleaner.clean_files()
+
+    return decorator

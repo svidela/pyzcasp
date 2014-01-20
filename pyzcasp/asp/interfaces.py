@@ -113,7 +113,10 @@ class ISolver(IProcess):
     def __filteratoms__(self, atoms):
         """"""
         
-
+class ISubsetMinimalSolver(interface.Interface):
+    """
+    Marker interface for subset minimal solver
+    """
     
 class IAnswerSet(interface.Interface):
     """
@@ -126,6 +129,9 @@ class IGrounderSolver(interface.Interface):
     """
     Abstract ground and solve
     """
+    
+    grounder = interface.Attribute("Grounder")
+    solver = interface.Attribute("Solver")
 
     def run(self, lp="", grounder_args=[], solver_args=[]):
         """"""
@@ -149,3 +155,12 @@ class IEncodingRegistry(interface.Interface):
     def get_encoding(self, name):
         """"""
     
+class ICleaner(interface.Interface):
+    """
+    """
+    
+    def collect_file(self, filename):
+        """"""
+        
+    def clean_files(self):
+        """"""
