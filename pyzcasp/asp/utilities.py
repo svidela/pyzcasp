@@ -16,7 +16,7 @@
 # along with caspo.  If not, see <http://www.gnu.org/licenses/>.import random
 # -*- coding: utf-8 -*-
 
-import json, subprocess
+import json, subprocess, os
 
 from zope import component
 
@@ -75,7 +75,10 @@ class EncodingRegistry(object):
         self.__registry = {}
     
     def register_encoding(self, name, path):
-        self.__registry[name] = path
+        if os.path.isfile(path):
+            self.__registry[name] = path
+        else:
+            raise IOError("File not found: %s" % path)
         
     def get_encoding(self, name):
         try:
