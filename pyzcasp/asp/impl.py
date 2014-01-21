@@ -25,11 +25,17 @@ from interfaces import *
 class Term(object):
     interface.implements(ITerm)
     
-    def __init__(self, predicate, arguments=[], quotes=True):
+    def __init__(self, predicate, arguments=[], quotes=True, unquotes=False):
         self.__pred = predicate
         self.quotes = quotes
+        self.unquotes = unquotes
+        if quotes and unquotes:
+            raise Exception("Cannot quote and unquote arguments the same time: %s" % arguments)
+            
         if quotes:
-            self.__args = map(lambda arg: (isinstance(arg, str) and '"'+arg+'"') or arg, arguments)
+            self.__args = map(lambda arg: (isinstance(arg, basestring) and '"'+arg+'"') or arg, arguments)
+        elif unquotes:
+            self.__args = map(lambda arg: (isinstance(arg, basestring) and arg[1:-1]) or arg, arguments)
         else:
             self.__args = arguments
     
@@ -42,7 +48,7 @@ class Term(object):
         return self.__args
         
     def arg(self, n):
-        return (isinstance(self.__args[n], str) and self.quotes and self.__args[n][1:-1]) or self.__args[n]
+        return self.__args[n]
             
     def __repr__(self):
         if len(self.args) == 0:
