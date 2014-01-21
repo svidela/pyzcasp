@@ -25,9 +25,12 @@ from interfaces import *
 class Term(object):
     interface.implements(ITerm)
     
-    def __init__(self, predicate, arguments=[]):
+    def __init__(self, predicate, arguments=[], quotes=True):
         self.__pred = predicate
-        self.__args = map(lambda arg: (isinstance(arg, str) and '"'+arg+'"') or arg, arguments)
+        if quotes:
+            self.__args = map(lambda arg: (isinstance(arg, str) and '"'+arg+'"') or arg, arguments)
+        else:
+            self.__args = arguments
     
     @property
     def pred(self):
@@ -82,7 +85,7 @@ class TermSet(set):
 class AnswerSet(object):
     interface.implements(IAnswerSet)
     
-    def __init__(self, atoms, score=None):
+    def __init__(self, atoms=[], score=None):
         super(AnswerSet, self).__init__()
         self.atoms = atoms
         self.score = score
