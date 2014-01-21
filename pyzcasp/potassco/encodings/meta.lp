@@ -61,8 +61,3 @@ L #avg  [     hold(P) = W : wlist(S,Q,pos(P),W),
           not hold(N) = W : wlist(S,Q,neg(N),W) ]
                      :- rule(pos(odd(S)),         pos(B)), hold(B).
                      :- rule(pos(false),          pos(B)), hold(B).
-
-% project output to atoms of answer set
-
-#hide.
-#show hold(atom(_)).

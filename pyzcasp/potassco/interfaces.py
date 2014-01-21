@@ -16,6 +16,7 @@
 # along with caspo.  If not, see <http://www.gnu.org/licenses/>.import random
 # -*- coding: utf-8 -*-
 
+from zope import interface
 from pyzcasp import asp
     
 class IGringoGrounder(asp.IGrounder):
@@ -42,3 +43,13 @@ class IClaspSubsetMinimalSolver(asp.ISubsetMinimalSolver):
     """
     Marker interface for clasp subset minimal solver
     """
+    
+class IMetaAnswerSet(asp.IAnswerSet):
+    """
+    """
+
+class IMetaGrounderSolver(asp.IGrounderSolver):
+    """
+    """
+    
+    optimize = interface.Attribute("Optimization method as expected by metasp encodings")

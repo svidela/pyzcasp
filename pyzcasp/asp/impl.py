@@ -27,6 +27,7 @@ class Term(object):
     
     def __init__(self, predicate, arguments=[], quotes=True):
         self.__pred = predicate
+        self.quotes = quotes
         if quotes:
             self.__args = map(lambda arg: (isinstance(arg, str) and '"'+arg+'"') or arg, arguments)
         else:
@@ -41,7 +42,7 @@ class Term(object):
         return self.__args
         
     def arg(self, n):
-        return (isinstance(self.__args[n], str) and self.__args[n][1:-1]) or self.__args[n]
+        return (isinstance(self.__args[n], str) and self.quotes and self.__args[n][1:-1]) or self.__args[n]
             
     def __repr__(self):
         if len(self.args) == 0:

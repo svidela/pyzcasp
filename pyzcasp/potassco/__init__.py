@@ -25,6 +25,9 @@ from zope import component
 
 gsm = component.getGlobalSiteManager()
 
+gsm.registerAdapter(MetaAnswerSet2TermSet)
+gsm.registerAdapter(MetaGrounderSolver, (IGringoGrounder, IClaspDSolver,), IMetaGrounderSolver)
+
 gsm.registerUtility(asp.EncodingRegistry(), asp.IEncodingRegistry, 'potassco')
 
 root = __file__.rsplit('/', 1)[0]

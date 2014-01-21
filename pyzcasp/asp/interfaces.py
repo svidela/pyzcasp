@@ -72,10 +72,6 @@ class IParser(interface.Interface):
     """
     
     parser = interface.Attribute("PLY Parser object")
-    def clean(self):
-        """
-        Remove default parsing aux files
-        """
     
 class ITermSetParser(IParser):
     """
