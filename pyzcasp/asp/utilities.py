@@ -17,6 +17,7 @@
 # -*- coding: utf-8 -*-
 
 import json, subprocess, os
+from itertools import chain
 
 from zope import component
 
@@ -31,8 +32,9 @@ class Process(object):
         self.allowed_returncodes = allowed_returncodes
         
     def execute(self, stdin, *args):
+        args = list(chain.from_iterable(map(lambda arg: arg.split(), args)))
         try:
-            self.__popen = subprocess.Popen([self.prg] + list(args), stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+            self.__popen = subprocess.Popen([self.prg] + args, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
                 
         except OSError, e:
             if e.errno == 2:
