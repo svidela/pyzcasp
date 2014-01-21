@@ -76,7 +76,7 @@ class ClaspHSolver(ClaspSolver):
     interface.implements(IClaspHSolver, IClaspSubsetMinimalSolver)
     
     def __filteratoms__(self, atoms):
-        filter(lambda atom: not atom.startswith('_'), atoms)
+        return filter(lambda atom: not atom.startswith('_'), atoms)
     
 class ClaspDSolver(ClaspSolver):
     interface.implements(IClaspDSolver, IClaspSubsetMinimalSolver)
