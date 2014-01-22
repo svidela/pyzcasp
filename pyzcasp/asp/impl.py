@@ -19,25 +19,31 @@
 import os, tempfile
 from zope import component
 from ply import lex
+import re
 
 from interfaces import *
+
+class NativeAtom(object):
+    interface.implements(INativeAtom)
+    
+    def __init__(self, name):
+        self.name = name
+        
+    def __str__(self):
+        return str(self.name)
+        
+    def __eq__(self, other):
+        return self.name == other.name
+        
+    def __ne__(self, other):
+        return self.name != other.name
                 
 class Term(object):
     interface.implements(ITerm)
     
-    def __init__(self, predicate, arguments=[], quotes=True, unquotes=False):
+    def __init__(self, predicate, arguments=[]):
         self.__pred = predicate
-        self.quotes = quotes
-        self.unquotes = unquotes
-        if quotes and unquotes:
-            raise Exception("Cannot quote and unquote arguments the same time: %s" % arguments)
-            
-        if quotes:
-            self.__args = map(lambda arg: (isinstance(arg, basestring) and '"'+arg+'"') or arg, arguments)
-        elif unquotes:
-            self.__args = map(lambda arg: (isinstance(arg, basestring) and arg[1:-1]) or arg, arguments)
-        else:
-            self.__args = arguments
+        self.__args = map(lambda arg: (isinstance(arg, basestring) and '"'+arg+'"') or arg, arguments)
     
     @property
     def pred(self):
@@ -48,7 +54,7 @@ class Term(object):
         return self.__args
         
     def arg(self, n):
-        return self.__args[n]
+        return (isinstance(self.__args[n], basestring) and self.__args[n][1:-1]) or self.__args[n]
             
     def __repr__(self):
         if len(self.args) == 0:
@@ -110,7 +116,7 @@ class Lexer(object):
     SPACE   = 'SPACE'
 
     # Tokens
-    t_STRING = r'"((\\")|[^"])*"'
+    t_STRING = r'"[^"\\]*(?:\\.[^"\\]*)*"' #r'"((\\")|[^"])*"'
     t_IDENT = r'[a-zA-Z_][a-zA-Z0-9_]*'
     t_MIDENT = r'-[a-zA-Z_][a-zA-Z0-9_]*'
     t_NUM = r'-?[0-9]+'

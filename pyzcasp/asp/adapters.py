@@ -94,7 +94,7 @@ class Lexer2TermSetParser(ParserAdapter):
         if len(t) == 2:
             t[0] = Term(t[1])
         elif len(t) == 5:
-            t[0] = Term(t[1], t[3], False, True)
+            t[0] = Term(t[1], t[3])
 
     def p_terms(self, t):
         """terms : term COMMA terms
@@ -112,12 +112,14 @@ class Lexer2TermSetParser(ParserAdapter):
                 | NUM
         """
         if len(t) == 2:
-            if re.match(r'-?[0-9]+', t[1]) != None:
+            if re.match(self.lex.t_NUM, t[1]):
                 t[0] = int(t[1])
+            elif re.match(self.lex.t_STRING, t[1]):
+                t[0] = t[1][1:-1]
             else:
-                t[0] = t[1]
+                t[0] = NativeAtom(t[1])
         else:
-            t[0] = Term(t[1], t[3], False, True)
+            t[0] = Term(t[1], t[3])
 
 class AnswerSet2TermSet(TermSetAdapter):
     component.adapts(IAnswerSet, ITermSetParser)

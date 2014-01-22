@@ -18,6 +18,20 @@
 
 from zope import interface
 
+class INativeAtom(interface.Interface):
+    """
+    """
+    name = interface.Attribute("Atom name")
+    
+    def __str__(self):
+        """"""
+        
+    def __eq__(self):
+        """"""
+    
+    def __ne__(self):
+        """"""
+
 class ITerm(interface.Interface):
     """
     Term pyasp object
