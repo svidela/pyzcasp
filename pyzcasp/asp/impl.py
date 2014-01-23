@@ -104,6 +104,16 @@ class Term(object):
     >>> noargs
     Term('noargs')
     
+    >>> noargs = Term(2)
+    Traceback (most recent call last):
+    ...
+    TypeError: Predicate name must be string. 2 <type 'int'>
+    
+    >>> noargs = Term('')
+    Traceback (most recent call last):
+    ...
+    ValueError: Predicate name must be a non-empty string.
+    
     >>> novalid = Term('novalid', [1.2, complex(1,3)])
     Traceback (most recent call last):
     ...
@@ -112,6 +122,12 @@ class Term(object):
     interface.implements(ITerm)
     
     def __init__(self, predicate, arguments=[]):
+        if not isinstance(predicate, basestring):
+            raise TypeError("Predicate name must be string. %s %s" % (predicate, predicate.__class__))
+        
+        if len(predicate) == 0:
+            raise ValueError("Predicate name must be a non-empty string.")
+            
         self.__pred = predicate
         
         forbidden = filter(lambda arg: isinstance(arg, float) or isinstance(arg, complex), arguments)
