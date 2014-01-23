@@ -24,7 +24,7 @@ The issue with the code above is that lex and yacc generate some auxiliary files
     ...     assert(os.path.isfile(f))
     ...
     
-Thus, to remove this file automatically, our Lexer and TermSetParser should be used with the `with` statement::
+Thus, to remove this files automatically, our Lexer and TermSetParser should be used with the *with* statement::
 
     >>> with Lexer() as lexer:
     ...     with ITermSetParser(lexer) as parser:
