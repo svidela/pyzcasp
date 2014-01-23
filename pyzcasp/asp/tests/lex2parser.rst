@@ -1,17 +1,20 @@
 Required imports::
 
     >>> import os
-    >>> from pyzcasp.asp import Lexer, ITermSetParser
+    >>> from zope.interface import providedBy
+    >>> from pyzcasp.asp import Lexer, ITermSetParser, ITerm
 
-First, we simply test that we can adapt a Lexer instance to a TermSetParser::
+First, we simply test that we can adapt a Lexer instance to a ITermSetParser::
 
     >>> lexer = Lexer()
     >>> parser = ITermSetParser(lexer)
 
-Now, let's see that the parser is able to parse an atom (string) as given by ASP solvers, to an instance of Term class::
+Now, let's see that the parser is able to parse an atom (string) as given by ASP solvers, to an instance providing ITerm::
 
     >>> atom = 'predicate(6,"string",1,atom,nested(1,2))'
     >>> term = parser.parse(atom)
+    >>> ITerm in providedBy(term)
+    True
     >>> term
     Term('predicate',[6,'"string"',1,'atom',Term('nested',[1,2])])
     >>> term.arg(0), term.arg(1), term.arg(2), term.arg(3), term.arg(4)

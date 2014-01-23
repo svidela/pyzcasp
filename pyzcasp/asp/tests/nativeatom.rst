@@ -1,13 +1,19 @@
 Required imports::
 
-    >>> from pyzcasp.asp import NativeAtom
+    >>> from zope.interface import providedBy
+    >>> from pyzcasp.asp import NativeAtom, INativeAtom
 
 We create 3 NativeAtom instances::
 
     >>> a = NativeAtom('a')
     >>> b = NativeAtom('b')
     >>> c = NativeAtom('a')
+    
+Instances of NativeAtom provide  INativeAtom
 
+    >>> INativeAtom in providedBy(a)
+    True
+    
 We can access to their names using the `name` property::
 
     >>> a.name

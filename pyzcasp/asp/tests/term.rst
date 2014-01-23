@@ -1,10 +1,13 @@
 Required imports::
 
-    >>> from pyzcasp.asp import NativeAtom, Term
+    >>> from zope.interface import providedBy
+    >>> from pyzcasp.asp import NativeAtom, Term, ITerm
 
-We start creating a Term instance with some arguments::
+We start creating a Term instance with some arguments and check it provides ITerm::
 
     >>> term1 = Term('predicate', [1,u'unicode', 'string', NativeAtom('native')])
+    >>> ITerm in providedBy(term1)
+    True
 
 We can get the predicate name and its arguments by using::
 
