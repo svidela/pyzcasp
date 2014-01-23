@@ -3,7 +3,7 @@ Required imports::
     >>> import os
     >>> from pyzcasp.asp import Lexer, ITermSetParser, TermSet
 
-First, we simply test that we can adapt a Lexer instance to a TermSetParser.
+First, we simply test that we can adapt a Lexer instance to a TermSetParser::
 
     >>> lexer = Lexer()
     >>> parser = ITermSetParser(lexer)
@@ -24,7 +24,7 @@ The issue with the code above is that lex and yacc generate some auxiliary files
     ...     assert(os.path.isfile(f))
     ...
     
-Thus, to remove this file automatically, our Lexer and TermSetParser should be used with the `with` statement
+Thus, to remove this file automatically, our Lexer and TermSetParser should be used with the `with` statement::
 
     >>> with Lexer() as lexer:
     ...     with ITermSetParser(lexer) as parser:
@@ -32,7 +32,6 @@ Thus, to remove this file automatically, our Lexer and TermSetParser should be u
     ...
     >>> term
     Term('predicate',[6,'"string"',1,'atom'])
-
     >>> for f in aux:
     ...     assert(not os.path.isfile(f))
     ...
