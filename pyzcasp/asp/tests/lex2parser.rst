@@ -1,7 +1,7 @@
 Required imports::
 
     >>> import os
-    >>> from pyzcasp.asp import Lexer, ITermSetParser, TermSet
+    >>> from pyzcasp.asp import Lexer, ITermSetParser
 
 First, we simply test that we can adapt a Lexer instance to a TermSetParser::
 
