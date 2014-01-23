@@ -3,7 +3,7 @@ Required import::
     >>> from zope.interface import providedBy
     >>> from pyzcasp.asp import AnswerSet, IAnswerSet
     
-An instance of ``AnswerSet`` provides ``IAnswerSet`` and is simply a list of atoms an a score::
+An instance of ``AnswerSet`` provides ``IAnswerSet`` and is simply a list of atoms with a score::
 
     >>> ans = AnswerSet(['a','b'], 10)
     >>> IAnswerSet in providedBy(ans)
