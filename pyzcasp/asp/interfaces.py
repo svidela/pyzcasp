@@ -26,10 +26,16 @@ class INativeAtom(interface.Interface):
     def __str__(self):
         """"""
         
+    def __repr__(self):
+        """"""
+        
     def __eq__(self):
         """"""
     
     def __ne__(self):
+        """"""
+        
+    def __hash__(self):
         """"""
 
 class ITerm(interface.Interface):
