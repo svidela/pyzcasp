@@ -100,6 +100,7 @@ class Cleaner(object):
         self.__files.add(filename)
     
     def clean_files(self):
-        for filename in self.__files:
-            os.unlink(filename)
-            
+        while self.__files:
+            filename = self.__files.pop()
+            if os.path.isfile(filename):
+                os.unlink(filename)

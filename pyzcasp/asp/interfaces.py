@@ -63,7 +63,6 @@ class ITermSet(interface.Interface):
     TermSet pyasp object
     """
     
-    termset = interface.Attribute("Set of ITerms")
     score = interface.Attribute("Score(s)")
     
     def to_file(self, filename=None):
@@ -71,12 +70,25 @@ class ITermSet(interface.Interface):
         Write terms to filename or temp file.
         Returns a file descriptor object.
         """
+    
+    def add(self, term):
+        """
+        Adds a term to the TermSet
+        """
         
     def union(self, other):
-        """"""
+        """
+        Return the union of self and other TermSet
+        """
         
     def __iter__(self):
         """
+        Return an iterator over terms
+        """
+        
+    def __len__(self):
+        """
+        Return number of terms in the TermSet
         """
         
 class ILexer(interface.Interface):

@@ -26,14 +26,12 @@ class MetaAnswerSet2TermSet(asp.TermSetAdapter):
     
     def __init__(self, answer, parser):
         super(MetaAnswerSet2TermSet, self).__init__()
-        self.answer = answer
-        self.parser = parser
-
-        for atom in self.answer.atoms:
-            meta = self.parser.parse(atom)
-            self.termset.add(meta.arg(0).arg(0))
         
-        self.termset.score = answer.score
+        for atom in answer.atoms:
+            meta = parser.parse(atom)
+            self._termset.add(meta.arg(0).arg(0))
+        
+        self._termset.score = answer.score
 
 class MetaGrounderSolver(asp.GrounderSolverAdapter):
     component.adapts(IGringoGrounder, IClaspDSolver)

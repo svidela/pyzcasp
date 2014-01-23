@@ -24,26 +24,6 @@ import re
 from interfaces import *
 
 class NativeAtom(object):
-    """
-    >>> a = NativeAtom('a')
-    >>> b = NativeAtom('b')
-    >>> c = NativeAtom('a')
-    >>> a.name
-    'a'
-    >>> a != b
-    True
-    >>> a == b
-    False
-    >>> a == c
-    True
-    >>> a != c
-    False
-    
-    >>> hash(a) == hash(c)
-    True
-    >>> hash(c) != hash(b)
-    True
-    """
     interface.implements(INativeAtom)
     
     def __init__(self, name):
@@ -65,60 +45,6 @@ class NativeAtom(object):
         return hash(self.name)
                 
 class Term(object):
-    """
-    >>> term1 = Term('predicate', [1,u'unicode', 'string', NativeAtom('native')])
-    >>> str(term1)
-    'predicate(1,"unicode","string",native)'
-    
-    >>> term1.pred
-    'predicate'
-    >>> term1.args
-    [1, u'"unicode"', '"string"', 'native']
-    
-    >>> term1.arg(0), term1.arg(1), term1.arg(2), str(term1.arg(3))
-    (1, u'unicode', 'string', 'native')
-    
-    >>> noargs = Term('noargs')
-    >>> str(noargs)
-    'noargs'
-    >>> noargs.args
-    []
-    >>> noargs.arg(0)
-    Traceback (most recent call last):
-    ...
-    IndexError: list index out of range
-    
-    >>> term1 == noargs
-    False
-    >>> term1 != noargs
-    True
-    
-    >>> term2 = Term('predicate', [1,u'unicode', 'string', NativeAtom('native')])
-    >>> term1 == term2
-    True
-    >>> hash(term1) == hash(term2) 
-    True
-    
-    >>> term1
-    Term('predicate',[1,u'"unicode"','"string"','native'])
-    >>> noargs
-    Term('noargs')
-    
-    >>> noargs = Term(2)
-    Traceback (most recent call last):
-    ...
-    TypeError: Predicate name must be string. 2 <type 'int'>
-    
-    >>> noargs = Term('')
-    Traceback (most recent call last):
-    ...
-    ValueError: Predicate name must be a non-empty string.
-    
-    >>> novalid = Term('novalid', [1.2, complex(1,3)])
-    Traceback (most recent call last):
-    ...
-    TypeError: Number arguments must be integers. The following arguments are forbidden: [1.2, (1+3j)]
-    """
     interface.implements(ITerm)
     
     def __init__(self, predicate, arguments=[]):
@@ -246,8 +172,9 @@ class Lexer(object):
 
 def cleanrun(fn):
     def decorator(*args, **kwargs):
-        fn(*args, **kwargs)
+        retval = fn(*args, **kwargs)
         cleaner = component.getUtility(ICleaner)
         cleaner.clean_files()
+        return retval
 
     return decorator

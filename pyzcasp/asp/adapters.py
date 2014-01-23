@@ -29,20 +29,23 @@ class TermSetAdapter(object):
     
     def __init__(self):
         super(TermSetAdapter, self).__init__()
-        self.termset = TermSet()
+        self._termset = TermSet()
 
     @property
     def score(self):
-        return self.termset.score
-
-    def union(self, other):
-        return self.termset.union(other)
+        return self._termset.score
         
+    def add(self, term):
+        self._termset.add(term)
+    
+    def union(self, other):
+        return self._termset.union(other)
+                
     def to_file(self, filename=None):
-        return self.termset.to_file(filename)
+        return self._termset.to_file(filename)
             
     def __iter__(self):
-        return self.termset.__iter__()
+        return iter(self._termset)
         
 class ParserAdapter(object):
     interface.implements(IParser)
@@ -126,13 +129,11 @@ class AnswerSet2TermSet(TermSetAdapter):
     
     def __init__(self, answer, parser):
         super(AnswerSet2TermSet, self).__init__()
-        self.answer = answer
-        self.parser = parser
         
-        for atom in self.answer.atoms:
-            self.termset.add(self.parser.parse(atom))
+        for atom in answer.atoms:
+            self._termset.add(parser.parse(atom))
         
-        self.termset.score = answer.score
+        self._termset.score = answer.score
 
 class GrounderSolverAdapter(object):
     interface.implements(IGrounderSolver)
