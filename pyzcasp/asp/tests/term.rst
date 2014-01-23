@@ -12,7 +12,7 @@ We can get the predicate name and its arguments by using::
     'predicate'
     >>> term1.args
     [1, u'"unicode"', '"string"', 'native']
-    >>> term1.arg(0), term1.arg(1), term1.arg(2), str(term1.arg(3))
+    >>> term1.arg(0), term1.arg(1), term1.arg(2), term1.arg(3)
     (1, u'unicode', 'string', 'native')
 
 Term instances implement `__str__`::
