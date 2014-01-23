@@ -9,7 +9,7 @@ We create 3 NativeAtom instances::
     >>> b = NativeAtom('b')
     >>> c = NativeAtom('a')
     
-Instances of NativeAtom provide  INativeAtom
+Instances of NativeAtom provide  INativeAtom::
 
     >>> INativeAtom in providedBy(a)
     True

@@ -4,7 +4,7 @@ Required imports::
     >>> from zope.interface import providedBy
     >>> from pyzcasp.asp import TermSet, Term, cleanrun, ITermSet
 
-We create a TermSet instance from a list of Term instances and check that they provided ITermSet::
+We create a TermSet instance from a list of Term instances and check that it provides ITermSet::
 
     >>> t1 = Term('term1', [1, 'string'])
     >>> t2 = Term('term2', [3, 4])
@@ -13,7 +13,7 @@ We create a TermSet instance from a list of Term instances and check that they p
     >>> ITermSet in providedBy(ts1)
     True
 
-Next we can make the union of ts1 and ts2, and also get an object providing ITermSet::
+Next we can make the union of ``ts1`` and ``ts2``, and also get an object providing ITermSet::
 
     >>> ts = ts1.union(ts2)
     >>> ITermSet in providedBy(ts)
