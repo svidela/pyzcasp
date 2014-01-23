@@ -24,6 +24,26 @@ import re
 from interfaces import *
 
 class NativeAtom(object):
+    """
+    >>> a = NativeAtom('a')
+    >>> b = NativeAtom('b')
+    >>> c = NativeAtom('a')
+    >>> a.name
+    'a'
+    >>> a != b
+    True
+    >>> a == b
+    False
+    >>> a == c
+    True
+    >>> a != c
+    False
+    
+    >>> hash(a) == hash(c)
+    True
+    >>> hash(c) != hash(b)
+    True
+    """
     interface.implements(INativeAtom)
     
     def __init__(self, name):
@@ -32,17 +52,72 @@ class NativeAtom(object):
     def __str__(self):
         return str(self.name)
         
+    def __repr__(self):
+        return repr(self.name)
+        
     def __eq__(self, other):
         return self.name == other.name
         
     def __ne__(self, other):
-        return self.name != other.name
+        return not self.__eq__(other)
+    
+    def __hash__(self):
+        return hash(self.name)
                 
 class Term(object):
+    """
+    >>> term1 = Term('predicate', [1,u'unicode', 'string', NativeAtom('native')])
+    >>> str(term1)
+    'predicate(1,"unicode","string",native)'
+    
+    >>> term1.pred
+    'predicate'
+    >>> term1.args
+    [1, u'"unicode"', '"string"', 'native']
+    
+    >>> term1.arg(0), term1.arg(1), term1.arg(2), str(term1.arg(3))
+    (1, u'unicode', 'string', 'native')
+    
+    >>> noargs = Term('noargs')
+    >>> str(noargs)
+    'noargs'
+    >>> noargs.args
+    []
+    >>> noargs.arg(0)
+    Traceback (most recent call last):
+    ...
+    IndexError: list index out of range
+    
+    >>> term1 == noargs
+    False
+    >>> term1 != noargs
+    True
+    
+    >>> term2 = Term('predicate', [1,u'unicode', 'string', NativeAtom('native')])
+    >>> term1 == term2
+    True
+    >>> hash(term1) == hash(term2) 
+    True
+    
+    >>> term1
+    Term('predicate',[1,u'"unicode"','"string"','native'])
+    >>> noargs
+    Term('noargs')
+    
+    >>> novalid = Term('novalid', [1.2, complex(1,3)])
+    Traceback (most recent call last):
+    ...
+    TypeError: Number arguments must be integers. The following arguments are forbidden: [1.2, (1+3j)]
+    """
     interface.implements(ITerm)
     
     def __init__(self, predicate, arguments=[]):
         self.__pred = predicate
+        
+        forbidden = filter(lambda arg: isinstance(arg, float) or isinstance(arg, complex), arguments)
+        if len(forbidden) > 0:
+            raise TypeError("Number arguments must be integers. The following arguments are forbidden: %s" % forbidden)
+            
         self.__args = map(lambda arg: (isinstance(arg, basestring) and '"'+arg+'"') or arg, arguments)
     
     @property
@@ -69,10 +144,13 @@ class Term(object):
             return self.__pred + "(" + ",".join(map(str, self.__args)) + ")"
     
     def __hash__(self):
-        return tuple([self.__pred] + self.__args).__hash__()
+        return hash(tuple([self.__pred] + self.__args))
     
     def __eq__(self,other):
         return self.__pred == other.pred and self.__args == other.args
+        
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
 class TermSet(set):
     interface.implements(ITermSet)
