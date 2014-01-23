@@ -26,6 +26,7 @@ Now, let's define an adapter from ``IObject`` to ``ITermSet`` using ``TermSetAda
     ...         super(Object2TermSet, self).__init__()
     ...         for value in obj.values:
     ...             self._termset.add(Term('value', [value]))
+    ...         self._termset.score = sum(obj.values)
     ...
     >>> component.globalSiteManager.registerAdapter(Object2TermSet)
     
@@ -41,13 +42,10 @@ Let's check that the 3 value where added as ``Term`` instances::
     >>> for i in [1,2,3]:
     ...     assert(Term('value',[i]) in termset)
     ...
+    >>> termset.score
+    6
     
-Then, we can add more terms or union another term set::
-
-    >>> termset.add(Term('some',['pred']))
-    >>> termset = termset.union(TermSet([Term('atom')]))
-    
-and of course, dump everything to a file::
+We can dump everything to a file::
 
     >>> tmp = termset.to_file()
     >>> fd = open(tmp, 'r')
@@ -55,6 +53,17 @@ and of course, dump everything to a file::
     >>> for i in [1,2,3]:
     ...     assert('value(%s).' % i in lines)
     ...
-    >>> 'some("pred").' in lines and 'atom.' in lines
-    True
     >>> os.unlink(tmp)
+   
+Finally, we can add more terms, or make the union with another instance of ``TermSet``::
+
+    >>> termset.add(Term('some',['pred']))
+    >>> Term('some',['pred']) in termset
+    True
+    >>> utermset = termset.union(TermSet([Term('atom')]))
+    >>> len(utermset)
+    5
+    >>> for term in termset:
+    ...     assert(term in utermset)
+    >>> Term('atom') in utermset
+    True

@@ -65,10 +65,7 @@ class ParserAdapter(object):
     def __enter__(self):
         return self
         
-    def __exit__(self, type, value, traceback):
-        if os.path.isfile("parser.out"):
-            os.remove("parser.out")
-        
+    def __exit__(self, type, value, traceback):        
         if os.path.isfile("parsetab.py"): 
             os.remove("parsetab.py")
             
