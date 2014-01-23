@@ -4,7 +4,7 @@ Required imports::
     >>> from zope.interface import providedBy
     >>> from pyzcasp.asp import TermSet, Term, cleanrun, ITermSet
 
-We create a TermSet instance from a list of Term instances and check that it provides ITermSet::
+We create a ``TermSet`` instance from a list of Term instances and check that it provides ``ITermSet``::
 
     >>> t1 = Term('term1', [1, 'string'])
     >>> t2 = Term('term2', [3, 4])
@@ -13,7 +13,7 @@ We create a TermSet instance from a list of Term instances and check that it pro
     >>> ITermSet in providedBy(ts1)
     True
 
-Next we can make the union of ``ts1`` and ``ts2``, and also get an object providing ITermSet::
+Next we can make the union of ``ts1`` and ``ts2``, and also get an object providing ``ITermSet``::
 
     >>> ts = ts1.union(ts2)
     >>> ITermSet in providedBy(ts)
@@ -32,7 +32,7 @@ We can also add new terms::
     >>> len(ts)
     3
 
-TermSet implements `__iter__` to iterate over its terms::
+TermSet implements ``__iter__`` to iterate over its terms::
 
     >>> l = list(iter(ts))
     >>> len(l)
@@ -44,7 +44,7 @@ TermSet implements `__iter__` to iterate over its terms::
     >>> t3 in l
     True
 
-We can dump the TermSet instance to a temporary file::
+We can dump the ``TermSet`` instance to a temporary file::
 
     >>> tmp = ts.to_file()
     >>> fd = open(tmp, 'r')
@@ -65,7 +65,7 @@ Note that the temporary file is still there (must remain accesible for the groun
     >>> os.unlink(tmp)
     
 Hence, we can use a decorator to have automated cleaning of temporary files. First let's define a function
-that will dump the TermSet to a temporary file and simply returns its name::
+that will dump the ``TermSet`` to a temporary file and simply returns its name::
 
     >>> @cleanrun
     ... def somefunc():

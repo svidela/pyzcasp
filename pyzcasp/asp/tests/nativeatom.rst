@@ -3,18 +3,18 @@ Required imports::
     >>> from zope.interface import providedBy
     >>> from pyzcasp.asp import NativeAtom, INativeAtom
 
-We create 3 NativeAtom instances::
+We create 3 ``NativeAtom`` instances::
 
     >>> a = NativeAtom('a')
     >>> b = NativeAtom('b')
     >>> c = NativeAtom('a')
     
-Instances of NativeAtom provide  INativeAtom::
+Instances of ``NativeAtom`` provide ``INativeAtom``::
 
     >>> INativeAtom in providedBy(a)
     True
     
-We can access to their names using the `name` property::
+We can access to their names using the ``name`` property::
 
     >>> a.name
     'a'
@@ -24,7 +24,7 @@ or simply by their str representation::
     >>> str(a), str(b), str(c)
     ('a', 'b', 'a')
 
-Instances of NativeAtom are comparable (== , !=) and hashable::
+Instances of ``NativeAtom`` are comparable (== , !=) and hashable::
 
     >>> a != b
     True

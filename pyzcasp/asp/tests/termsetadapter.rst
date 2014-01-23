@@ -29,7 +29,7 @@ Now, let's define an adapter from ``IObject`` to ``ITermSet`` using ``TermSetAda
     ...
     >>> component.globalSiteManager.registerAdapter(Object2TermSet)
     
-Next, we can create an instance of Object class and adapt it to ``ITermSet`` interface::
+Next, we can create an instance of ``Object`` class and adapt it to ``ITermSet`` interface::
 
     >>> obj = Object([1,2,3])
     >>> termset = ITermSet(obj)

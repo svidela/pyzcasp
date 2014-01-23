@@ -4,12 +4,12 @@ Required imports::
     >>> from zope.interface import providedBy
     >>> from pyzcasp.asp import Lexer, ITermSetParser, ITerm
 
-First, we simply test that we can adapt a Lexer instance to a ITermSetParser::
+First, we simply test that we can adapt a ``Lexer`` instance to a ``ITermSetParser``::
 
     >>> lexer = Lexer()
     >>> parser = ITermSetParser(lexer)
 
-Now, let's see that the parser is able to parse an atom (string) as given by ASP solvers, to an instance providing ITerm::
+Now, let's see that the parser is able to parse an atom (string) as given by ASP solvers, to an instance providing ``ITerm``::
 
     >>> atom = 'predicate(6,"string",1,atom,nested(1,2))'
     >>> term = parser.parse(atom)
@@ -27,7 +27,7 @@ The issue with the code above is that lex and yacc generate some auxiliary files
     ...     assert(os.path.isfile(f))
     ...
     
-Thus, to remove this files automatically, our Lexer and TermSetParser should be used with the *with* statement::
+Thus, to remove this files automatically, our ``Lexer`` and ``ITermSetParser`` should be used with the *with* statement::
 
     >>> with Lexer() as lexer:
     ...     with ITermSetParser(lexer) as parser:

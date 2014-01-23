@@ -3,7 +3,7 @@ Required imports::
     >>> from zope.interface import providedBy
     >>> from pyzcasp.asp import NativeAtom, Term, ITerm
 
-We start creating a Term instance with some arguments and check it provides ITerm::
+We start creating a ``Term`` instance with some arguments and check it provides ``ITerm``::
 
     >>> term1 = Term('predicate', [1,u'unicode', 'string', NativeAtom('native')])
     >>> ITerm in providedBy(term1)
@@ -18,12 +18,12 @@ We can get the predicate name and its arguments by using::
     >>> term1.arg(0), term1.arg(1), term1.arg(2), term1.arg(3)
     (1, u'unicode', 'string', 'native')
 
-Term instances implement `__str__`::
+``Term`` instances implement ``__str__``::
 
     >>> str(term1)
     'predicate(1,"unicode","string",native)'
 
-We can also create a Term without arguments::
+We can also create a ``Term`` without arguments::
 
     >>> noargs = Term('noargs')
     >>> str(noargs)
@@ -35,7 +35,7 @@ We can also create a Term without arguments::
     ...
     IndexError: list index out of range
 
-Instances of Term are comparable and hashable::
+Instances of ``Term`` are comparable and hashable::
 
     >>> term1 == noargs
     False
@@ -48,7 +48,7 @@ Instances of Term are comparable and hashable::
     True
 
 
-Term instances implement `__repr__`::
+``Term`` instances implement `__repr__`::
 
     >>> term1
     Term('predicate',[1,u'"unicode"','"string"','native'])
@@ -56,7 +56,7 @@ Term instances implement `__repr__`::
     Term('noargs')
 
 
-Term predicate name must be a non-empty string::
+The predicate name must be a non-empty string::
 
     >>> noargs = Term(2)
     Traceback (most recent call last):
@@ -68,7 +68,7 @@ Term predicate name must be a non-empty string::
     ...
     ValueError: Predicate name must be a non-empty string.
 
-Term arguments cannot be neither float nor complex numbers::
+Arguments cannot be neither float nor complex numbers::
 
     >>> novalid = Term('novalid', [1.2, complex(1,3)])
     Traceback (most recent call last):
