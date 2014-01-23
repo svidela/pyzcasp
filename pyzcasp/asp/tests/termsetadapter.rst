@@ -4,7 +4,7 @@ Required imports::
     >>> from pyzcasp.asp import TermSetAdapter, TermSet, Term, ITermSet
     >>> from zope import component, interface
     
-Suppose we have an interface IObject and a class implementing such interface::
+Suppose we have an interface ``IObject`` and a class implementing such interface::
 
     >>> class IObject(interface.Interface):
     ...     values = interface.Attribute("Some values")
@@ -17,7 +17,7 @@ Suppose we have an interface IObject and a class implementing such interface::
     ...         self.values = values
     ...
     
-Now, let's define an adapter from IMyObject to ITermSet using TermSetAdapter base class::
+Now, let's define an adapter from ``IObject`` to ``ITermSet`` using ``TermSetAdapter`` base class::
 
     >>> class Object2TermSet(TermSetAdapter):
     ...     component.adapts(IObject)
@@ -29,12 +29,12 @@ Now, let's define an adapter from IMyObject to ITermSet using TermSetAdapter bas
     ...
     >>> component.globalSiteManager.registerAdapter(Object2TermSet)
     
-Next, we can create an instance of Object class and adapt it to ITermSet interface::
+Next, we can create an instance of Object class and adapt it to ``ITermSet`` interface::
 
     >>> obj = Object([1,2,3])
     >>> termset = ITermSet(obj)
     
-Let's check that the 3 value where added as Term instances::
+Let's check that the 3 value where added as ``Term`` instances::
     
     >>> len(termset)
     3
