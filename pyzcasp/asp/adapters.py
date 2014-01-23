@@ -47,6 +47,9 @@ class TermSetAdapter(object):
     def __iter__(self):
         return iter(self._termset)
         
+    def __len__(self):
+        return len(self._termset)
+        
 class ParserAdapter(object):
     interface.implements(IParser)
     
