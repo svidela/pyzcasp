@@ -2,7 +2,7 @@ Required import::
 
     >>> from pyzcasp.asp import AnswerSet
     
-An instance of AnswerSet is simply a list of atoms an a score
+An instance of AnswerSet is simply a list of atoms an a score::
 
     >>> ans = AnswerSet(['a','b'], 10)
     >>> ans.atoms

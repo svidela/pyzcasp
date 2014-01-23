@@ -55,7 +55,7 @@ Note that the temporary file is still there (must remain accesible for the groun
     >>> os.unlink(tmp)
     
 Hence, we can use a decorator to have automated cleaning of temporary files. First let's define a function
-that will dump the TermSet to a temporary file and simply returns its name.
+that will dump the TermSet to a temporary file and simply returns its name::
 
     >>> @cleanrun
     ... def somefunc():
