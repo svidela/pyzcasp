@@ -42,7 +42,7 @@ class MetaGrounderSolver(asp.GrounderSolver):
         super(MetaGrounderSolver, self).__init__(grounder, solver)
         self.optimize = asp.TermSet()
         
-    def run(self, lp="", grounder_args=[], solver_args=[]):
+    def run(self, lp="", grounder_args=[], solver_args=[], lazy=True):
         if '--reify' not in grounder_args:
             grounder_args.append('--reify')
             
@@ -53,7 +53,7 @@ class MetaGrounderSolver(asp.GrounderSolver):
         metaD = reg.get_encoding('metaD')
         metaO = reg.get_encoding('metaO')
         
-        super(MetaGrounderSolver, self).run(grounding + lp, grounder_args=[meta, metaD, metaO, self.optimize.to_file()], solver_args=solver_args)
+        super(MetaGrounderSolver, self).run(grounding + lp, grounder_args=[meta, metaD, metaO, self.optimize.to_file()], solver_args=solver_args, lazy=lazy)
 
     def __iter__(self):
         with asp.Lexer() as lexer:
