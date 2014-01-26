@@ -38,7 +38,11 @@ class ClaspSolver(asp.Process):
         args = [arg for arg in args if not arg.startswith('--outf')]        
         args.append('--outf=2')
         
-        self.json = json.loads(super(ClaspSolver, self).execute(stdin, *args))
+        try:
+            self.json = json.loads(super(ClaspSolver, self).execute(stdin, *args))
+        except asp.ProcessError as e:
+            if e.code == 11: # INTERRUPTED
+                self.json = json.loads(e.stdout)
         
     def answers(self):
         if 'Witnesses' not in self.json:

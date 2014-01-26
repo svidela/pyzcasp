@@ -192,3 +192,11 @@ class ICleaner(interface.Interface):
         
     def clean_files(self):
         """"""
+        
+class IProcessError(interface.Interface):
+    """
+    """
+    prg = interface.Attribute("")
+    code = interface.Attribute("")
+    stdout = interface.Attribute("")
+    stderr = interface.Attribute("")

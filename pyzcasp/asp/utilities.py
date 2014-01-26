@@ -45,7 +45,7 @@ class Process(object):
         (stdout, stderr) = self.__popen.communicate(stdin)
         
         if self.__popen.returncode not in self.allowed_returncodes:
-            raise Exception("Return code %d not allowd for %s. %s" % (self.__popen.returncode, self.prg, stderr))
+            raise ProcessError(self.prg, self.__popen.returncode, stdout, stderr)
             
         return stdout
 

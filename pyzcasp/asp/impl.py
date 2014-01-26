@@ -172,9 +172,24 @@ class Lexer(object):
 
 def cleanrun(fn):
     def decorator(*args, **kwargs):
-        retval = fn(*args, **kwargs)
-        cleaner = component.getUtility(ICleaner)
-        cleaner.clean_files()
+        try:
+            retval = fn(*args, **kwargs)
+        finally:
+            cleaner = component.getUtility(ICleaner)
+            cleaner.clean_files()
+            
         return retval
 
     return decorator
+    
+class ProcessError(Exception):
+    interface.implements(IProcessError)
+    
+    def __init__(self, prg, code, stdout, stderr):
+        self.prg = prg
+        self.code = code
+        self.stdout = stdout
+        self.stderr = stderr
+
+    def __str__(self):
+        return "Return code %d not allowed for %s. %s" % (self.code, self.prg, self.stderr)
