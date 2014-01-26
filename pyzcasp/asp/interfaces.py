@@ -155,23 +155,18 @@ class IAnswerSet(interface.Interface):
     
 class IGrounderSolver(interface.Interface):
     """
-    Abstract ground and solve
+    Ground, solve and parse to TermSet
     """
     
     grounder = interface.Attribute("Grounder")
     solver = interface.Attribute("Solver")
 
-    def run(self, lp="", grounder_args=[], solver_args=[]):
+    def run(self, lp="", grounder_args=[], solver_args=[], lazy=True):
         """"""
 
     def __iter__(self):
         """
         """
-        
-class IDefaultGrounderSolver(IGrounderSolver):
-    """
-    Ground, solve and parse to TermSet
-    """
     
 class IEncodingRegistry(interface.Interface):
     """

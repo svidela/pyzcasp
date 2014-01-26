@@ -135,30 +135,28 @@ class AnswerSet2TermSet(TermSetAdapter):
         
         self._termset.score = answer.score
 
-class GrounderSolverAdapter(object):
+class GrounderSolver(object):
     interface.implements(IGrounderSolver)
+    component.adapts(IGrounder, ISolver)
 
     def __init__(self, grounder, solver):
-        super(GrounderSolverAdapter, self).__init__()
+        super(GrounderSolver, self).__init__()
         self.grounder = grounder
         self.solver = solver
         
-    def run(self, lp="", grounder_args=[], solver_args=[]):
+    def run(self, lp="", grounder_args=[], solver_args=[], lazy=True):
         if lp and '-' not in grounder_args:
             grounder_args.append('-')
             
         grounding = self.grounder.execute(lp, *grounder_args)
         self.solver.execute(grounding, *solver_args)
         
-    def __iter__(self):
-        raise NotImplementedError("This is an abstract grounder and solver")
-
-class DefaultGrounderSolver(GrounderSolverAdapter):
-    component.adapts(IGrounder, ISolver)
-    interface.implements(IDefaultGrounderSolver)
-
+        if not lazy:
+            return list(iter(self))
+        
     def __iter__(self):
         with Lexer() as lexer:
             with ITermSetParser(lexer) as parser:        
                 for answer in self.solver.answers():
                     yield component.getMultiAdapter((answer, parser), ITermSet)
+                    

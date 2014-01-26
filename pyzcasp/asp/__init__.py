@@ -27,6 +27,6 @@ gsm = getGlobalSiteManager()
 
 gsm.registerAdapter(Lexer2TermSetParser, (ILexer,), ITermSetParser)
 gsm.registerAdapter(AnswerSet2TermSet)
-gsm.registerAdapter(DefaultGrounderSolver, (IGrounder, ISolver,), IDefaultGrounderSolver)
+gsm.registerAdapter(GrounderSolver)
 
 gsm.registerUtility(Cleaner(), ICleaner)
