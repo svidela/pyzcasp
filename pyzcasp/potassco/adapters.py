@@ -53,7 +53,8 @@ class MetaGrounderSolver(asp.GrounderSolver):
         metaD = reg.get_encoding('metaD')
         metaO = reg.get_encoding('metaO')
         
-        super(MetaGrounderSolver, self).run(grounding + lp, grounder_args=[meta, metaD, metaO, self.optimize.to_file()], solver_args=solver_args, lazy=lazy)
+        metasp = [meta, metaD, metaO, self.optimize.to_file()]
+        return super(MetaGrounderSolver, self).run(grounding + lp, grounder_args=metasp, solver_args=solver_args, lazy=lazy)
 
     def __iter__(self):
         with asp.Lexer() as lexer:
