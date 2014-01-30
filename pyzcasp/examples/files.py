@@ -9,9 +9,9 @@ def main(args):
     clasp = component.getUtility(potassco.IClaspSolver)
     clingo = component.getMultiAdapter((gringo, clasp), asp.IGrounderSolver)
     
-    reg = component.getUtility(asp.IEncodingRegistry, 'example')
+    encodings = component.getUtility(asp.IEncodingRegistry).encodings(gringo)
     
-    models = clingo.run(grounder_args=["-c k=2", reg.get_encoding('enco-1')], solver_args=["0"], lazy=False)
+    models = clingo.run(grounder_args=["-c k=2", encodings('enco-1')], solver_args=["0"], lazy=False)
     print [term for term in models[0]]
     print [term for term in models[1]]
 
@@ -39,6 +39,6 @@ if __name__ == '__main__':
 
     root = __file__.rsplit('/', 1)[0]
     reg = component.getUtility(asp.IEncodingRegistry, 'example')
-    reg.register_encoding('enco-1', root + '/encodings/encoding-1.lp')
+    reg.register('enco-1', root + '/encodings/encoding-1.lp', potassco.IGringoGrounder)
     
     main(args)
