@@ -43,11 +43,11 @@ class Process(object):
                 raise e
                 
         (stdout, stderr) = self.__popen.communicate(stdin)
-        
-        if self.__popen.returncode not in self.allowed_returncodes:
-            raise ProcessError(self.prg, self.__popen.returncode, stdout, stderr)
-            
-        return stdout
+        returncode = self.__popen.returncode
+        if returncode not in self.allowed_returncodes:
+            raise ProcessError(self.prg, returncode, stdout, stderr)
+    
+        return stdout, returncode
 
 class Solver(Process):
     interface.implements(ISolver)
@@ -67,27 +67,26 @@ class Solver(Process):
 class Grounder(Process):
     interface.implements(IGrounder)
 
-
 class EncodingRegistry(object):
     interface.implements(IEncodingRegistry)
     
     def __init__(self):
         super(EncodingRegistry, self).__init__()
-        
-        self.__registry = {}
     
-    def register_encoding(self, name, path):
-        if os.path.isfile(path):
-            self.__registry[name] = path
-        else:
+    def register(self, name, path, igrounder):
+        if not os.path.isfile(path):
             raise IOError("File not found: %s" % path)
-        
-    def get_encoding(self, name):
-        try:
-            return self.__registry[name]
-        except KeyError,e:
-            raise KeyError("No encoding registered with name %s" % e)
+
+        @interface.implementer(IEncoding)
+        @component.adapter(igrounder)
+        def encoding(grounder):
+            return path
             
+        gsm = component.getGlobalSiteManager()    
+        gsm.registerAdapter(encoding, (igrounder,), IEncoding, name)
+
+    def encodings(self, grounder):
+        return lambda name: component.getAdapter(grounder, IEncoding, name=name)
             
 class Cleaner(object):
     interface.implements(ICleaner)

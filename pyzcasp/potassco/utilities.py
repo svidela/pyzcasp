@@ -39,10 +39,17 @@ class ClaspSolver(asp.Process):
         args.append('--outf=2')
         
         try:
-            self.json = json.loads(super(ClaspSolver, self).execute(stdin, *args))
+            stdout, code = super(ClaspSolver, self).execute(stdin, *args)
+            self.json = json.loads(stdout)
+                        
         except asp.ProcessError as e:
             if e.code == 11: # INTERRUPTED
-                self.json = json.loads(e.stdout)
+                stdout = e.stdout
+                code = e.code
+                self.json = json.loads(stdout)
+
+        self.SATISFIABLE = self.json['Result'] == "SATISFIABLE"
+        return stdout, code
         
     def answers(self):
         if 'Witnesses' not in self.json:

@@ -148,7 +148,7 @@ class GrounderSolver(object):
         if lp and '-' not in grounder_args:
             grounder_args.append('-')
             
-        grounding = self.grounder.execute(lp, *grounder_args)
+        grounding, code = self.grounder.execute(lp, *grounder_args)
         self.solver.execute(grounding, *solver_args)
         
         if not lazy:

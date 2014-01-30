@@ -172,11 +172,16 @@ class IEncodingRegistry(interface.Interface):
     """
     """
     
-    def register_encoding(self, path, name):
+    def register(self, name, path, igrounder):
         """"""
         
-    def get_encoding(self, name):
+    def encodings(self, igrounder):
         """"""
+
+class IEncoding(interface.Interface):
+    """
+    """
+    
     
 class ICleaner(interface.Interface):
     """

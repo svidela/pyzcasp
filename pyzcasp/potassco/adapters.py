@@ -40,18 +40,19 @@ class MetaGrounderSolver(asp.GrounderSolver):
     
     def __init__(self, grounder, solver):
         super(MetaGrounderSolver, self).__init__(grounder, solver)
+        self.grounder = grounder
         self.optimize = asp.TermSet()
         
     def run(self, lp="", grounder_args=[], solver_args=[], lazy=True):
         if '--reify' not in grounder_args:
             grounder_args.append('--reify')
             
-        grounding = self.grounder.execute("", *grounder_args)
+        grounding, code = self.grounder.execute("", *grounder_args)
                 
-        reg = component.getUtility(asp.IEncodingRegistry, 'potassco')
-        meta = reg.get_encoding('meta')
-        metaD = reg.get_encoding('metaD')
-        metaO = reg.get_encoding('metaO')
+        encodings = component.getUtility(asp.IEncodingRegistry).encodings(self.grounder)
+        meta = encodings('potassco.meta')
+        metaD = encodings('potassco.metaD')
+        metaO = encodings('potassco.metaO')
         
         metasp = [meta, metaD, metaO, self.optimize.to_file()]
         return super(MetaGrounderSolver, self).run(grounding + lp, grounder_args=metasp, solver_args=solver_args, lazy=lazy)

@@ -30,3 +30,4 @@ gsm.registerAdapter(AnswerSet2TermSet)
 gsm.registerAdapter(GrounderSolver)
 
 gsm.registerUtility(Cleaner(), ICleaner)
+gsm.registerUtility(EncodingRegistry(), IEncodingRegistry)

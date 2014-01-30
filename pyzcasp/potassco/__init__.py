@@ -28,10 +28,8 @@ gsm = component.getGlobalSiteManager()
 gsm.registerAdapter(MetaAnswerSet2TermSet)
 gsm.registerAdapter(MetaGrounderSolver, (IGringoGrounder, IClaspDSolver,), IMetaGrounderSolver)
 
-gsm.registerUtility(asp.EncodingRegistry(), asp.IEncodingRegistry, 'potassco')
-
 root = __file__.rsplit('/', 1)[0]
-reg = component.getUtility(asp.IEncodingRegistry, 'potassco')
-reg.register_encoding('meta', root + '/encodings/meta.lp')
-reg.register_encoding('metaD', root + '/encodings/metaD.lp')
-reg.register_encoding('metaO', root + '/encodings/metaO.lp')
+reg = component.getUtility(asp.IEncodingRegistry)
+reg.register('potassco.meta', root + '/encodings/meta.lp', IGringoGrounder)
+reg.register('potassco.metaD', root + '/encodings/metaD.lp', IGringoGrounder)
+reg.register('potassco.metaO', root + '/encodings/metaO.lp', IGringoGrounder)
