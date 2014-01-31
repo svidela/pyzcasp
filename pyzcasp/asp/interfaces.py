@@ -129,6 +129,12 @@ class ISolver(IProcess):
     ASP Solver
     """
     
+    complete = interface.Attribute("")
+    unknown = interface.Attribute("")
+    unsat = interface.Attribute("")
+    sat = interface.Attribute("")
+    optimum = interface.Attribute("")
+    
     def __getstats__(self):
         """"""
         

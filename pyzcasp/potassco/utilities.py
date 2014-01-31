@@ -47,8 +47,7 @@ class ClaspSolver(asp.Process):
                 stdout = e.stdout
                 code = e.code
                 self.json = json.loads(stdout)
-
-        self.SATISFIABLE = self.json['Result'] == "SATISFIABLE"
+        
         return stdout, code
         
     def answers(self):
@@ -62,6 +61,27 @@ class ClaspSolver(asp.Process):
                 yield asp.AnswerSet(atoms, score)
             else:
                 yield asp.AnswerSet(atoms)
+                
+        
+    @property
+    def complete(self):
+        return self.__getstats__()['Complete'] == "yes"
+        
+    @property
+    def unknown(self):
+        return self.json['Result'] == "UNKNOWN"
+        
+    @property
+    def unsat(self):
+        return self.json['Result'] == "UNSATISFIABLE"
+        
+    @property
+    def sat(self):
+        return self.json['Result'] == "SATISFIABLE"
+        
+    @property
+    def optimum(self):
+        return self.json['Result'] == "OPTIMUM FOUND"
                 
     def __getstats__(self):
         return self.json['Stats']
