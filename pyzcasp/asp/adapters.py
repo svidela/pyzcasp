@@ -151,12 +151,13 @@ class GrounderSolver(object):
         grounding, code = self.grounder.execute(lp, *grounder_args)
         self.solver.execute(grounding, *solver_args)
         
+        self.answers = self.solver.answers()
         if not lazy:
             return list(iter(self))
         
     def __iter__(self):
         with Lexer() as lexer:
             with ITermSetParser(lexer) as parser:        
-                for answer in self.solver.answers():
+                for answer in self.answers:
                     yield component.getMultiAdapter((answer, parser), ITermSet)
                     
