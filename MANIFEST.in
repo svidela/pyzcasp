@@ -1,0 +1,3 @@
+include pyzcasp/potassco/encodings/*.lp
+include LICENSE
+include README.md
