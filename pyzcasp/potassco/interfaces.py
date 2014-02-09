@@ -1,6 +1,6 @@
 # Copyright (c) 2014, Santiago Videla
 #
-# This file is part of caspo.
+# This file is part of pyzcasp.
 #
 # caspo is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
