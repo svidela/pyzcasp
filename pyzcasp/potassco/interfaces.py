@@ -18,11 +18,22 @@
 
 from zope import interface
 from pyzcasp import asp
-    
+
 class IGringoGrounder(asp.IGrounder):
     """
     gringo grounder
     """
+    
+class IGringo3(IGringoGrounder):
+    """
+    gringo 3 grounder
+    """
+
+class IGringo4(IGringoGrounder):
+    """
+    gringo 4 grounder
+    """
+
 
 class IClaspSolver(asp.ISolver):
     """

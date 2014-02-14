@@ -25,8 +25,11 @@ from pyzcasp import asp
 from interfaces import *
 from impl import *
 
-class GringoGrounder(asp.Process):
-    interface.implements(IGringoGrounder)
+class Gringo3(asp.Process):
+    interface.implements(IGringo3)
+
+class Gringo4(asp.Process):
+    interface.implements(IGringo4)
     
 class ClaspSolver(asp.Process):
     interface.implements(IClaspSolver)
