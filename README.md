@@ -1,6 +1,6 @@
 Run doctests using:
 
-    $ nosetests --with-doctest --doctest-extension=rst --doctest-fixtures=_fixt --with-coverage --cover-package pyzcasp
+    $ nosetests --with-doctest --doctest-extension=rst --doctest-fixtures=_fixt --doctest-options='+NORMALIZE_WHITESPACE' --with-coverage --cover-package pyzcasp
     .......
     Name                          Stmts   Miss  Cover   Missing
     -----------------------------------------------------------
