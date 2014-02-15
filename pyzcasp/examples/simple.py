@@ -28,12 +28,19 @@ if __name__ == '__main__':
     parser.add_argument("--gringo", dest="gringo", default="gringo",
                         help="gringo grounder binary (Default to 'gringo')", metavar="G")
                         
+    parser.add_argument("--gringo-series", dest="gringo_series", type=int, default=3, choices=[3,4],
+                        help="gringo grounder binary (Default to 'gringo')", metavar="G")
+                        
     args = parser.parse_args()
     
     gsm = component.getGlobalSiteManager()
 
-    grounder = potassco.GringoGrounder(args.gringo)
-    gsm.registerUtility(grounder, potassco.IGringoGrounder)
+    if args.gringo_series == 3:
+        grounder = potassco.Gringo3(args.gringo)
+        gsm.registerUtility(grounder, potassco.IGringo3)
+    else:
+        grounder = potassco.Gringo4(args.gringo)
+        gsm.registerUtility(grounder, potassco.IGringo4)
     
     solver = potassco.ClaspSolver(args.clasp)
     gsm.registerUtility(solver, potassco.IClaspSolver)
