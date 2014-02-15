@@ -1,11 +1,11 @@
 Required imports::
 
     >>> from zope.interface import providedBy
-    >>> from pyzcasp.asp import NativeAtom, Term, ITerm
+    >>> from pyzcasp.asp import NativeTerm, Term, ITerm
 
 We start creating a ``Term`` instance with some arguments and check it provides ``ITerm``::
 
-    >>> term1 = Term('predicate', [1,u'unicode', 'string', NativeAtom('native')])
+    >>> term1 = Term('predicate', [1,u'unicode', 'string', NativeTerm('native')])
     >>> ITerm in providedBy(term1)
     True
 
@@ -41,7 +41,7 @@ Instances of ``Term`` are comparable and hashable::
     False
     >>> term1 != noargs
     True
-    >>> term2 = Term('predicate', [1,u'unicode', 'string', NativeAtom('native')])
+    >>> term2 = Term('predicate', [1,u'unicode', 'string', NativeTerm('native')])
     >>> term1 == term2
     True
     >>> hash(term1) == hash(term2) 

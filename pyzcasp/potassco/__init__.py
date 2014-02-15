@@ -26,10 +26,10 @@ from zope import component
 gsm = component.getGlobalSiteManager()
 
 gsm.registerAdapter(MetaAnswerSet2TermSet)
-gsm.registerAdapter(MetaGrounderSolver, (IGringoGrounder, IClaspDSolver,), IMetaGrounderSolver)
+gsm.registerAdapter(MetaGrounderSolver, (IGringo3, IClaspDSolver,), IMetaGrounderSolver)
 
 root = __file__.rsplit('/', 1)[0]
 reg = component.getUtility(asp.IEncodingRegistry)
-reg.register('potassco.meta', root + '/encodings/meta.lp', IGringoGrounder)
-reg.register('potassco.metaD', root + '/encodings/metaD.lp', IGringoGrounder)
-reg.register('potassco.metaO', root + '/encodings/metaO.lp', IGringoGrounder)
+reg.register('potassco.meta', root + '/encodings/meta.lp', IGringo3)
+reg.register('potassco.metaD', root + '/encodings/metaD.lp', IGringo3)
+reg.register('potassco.metaO', root + '/encodings/metaO.lp', IGringo3)

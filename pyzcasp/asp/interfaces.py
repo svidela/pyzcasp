@@ -18,10 +18,10 @@
 
 from zope import interface
 
-class INativeAtom(interface.Interface):
+class INativeTerm(interface.Interface):
     """
     """
-    name = interface.Attribute("Atom name")
+    name = interface.Attribute("Term name")
     
     def __str__(self):
         """"""

@@ -34,7 +34,7 @@ class MetaAnswerSet2TermSet(asp.TermSetAdapter):
         self._termset.score = answer.score
 
 class MetaGrounderSolver(asp.GrounderSolver):
-    component.adapts(IGringoGrounder, IClaspDSolver)
+    component.adapts(IGringo3, IClaspDSolver)
     interface.implements(IMetaGrounderSolver)
     
     

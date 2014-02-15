@@ -1,17 +1,17 @@
 Required imports::
 
     >>> from zope.interface import providedBy
-    >>> from pyzcasp.asp import NativeAtom, INativeAtom
+    >>> from pyzcasp.asp import NativeTerm, INativeTerm
 
-We create 3 ``NativeAtom`` instances::
+We create 3 ``NativeTerm`` instances::
 
-    >>> a = NativeAtom('a')
-    >>> b = NativeAtom('b')
-    >>> c = NativeAtom('a')
+    >>> a = NativeTerm('a')
+    >>> b = NativeTerm('b')
+    >>> c = NativeTerm('a')
     
-Instances of ``NativeAtom`` provide ``INativeAtom``::
+Instances of ``NativeTerm`` provide ``INativeTerm``::
 
-    >>> INativeAtom in providedBy(a)
+    >>> INativeTerm in providedBy(a)
     True
     
 We can access to their names using the ``name`` property::
@@ -24,7 +24,7 @@ or simply by their str representation::
     >>> str(a), str(b), str(c)
     ('a', 'b', 'a')
 
-Instances of ``NativeAtom`` are comparable (== , !=) and hashable::
+Instances of ``NativeTerm`` are comparable (== , !=) and hashable::
 
     >>> a != b
     True

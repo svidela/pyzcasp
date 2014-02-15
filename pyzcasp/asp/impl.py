@@ -23,8 +23,8 @@ import re
 
 from interfaces import *
 
-class NativeAtom(object):
-    interface.implements(INativeAtom)
+class NativeTerm(object):
+    interface.implements(INativeTerm)
     
     def __init__(self, name):
         self.name = name
