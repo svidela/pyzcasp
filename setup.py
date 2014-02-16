@@ -23,15 +23,21 @@ version = '0.1dev'
 
 setup(name='pyzcasp',
       version=version,
-      description="",
+      description="Python + Zope Component Architecture framework for Answer Set Programming",
       long_description="""\
 """,
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[
+          "Intended Audience :: Science/Research",
+          "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python :: 2.7",
+          "Topic :: Scientific/Engineering :: Artificial Intelligence"
+      ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       keywords='',
       author='Santiago Videla',
       author_email='santiago.videla@gmail.com',
       url='',
-      license='gpl3',
+      license='GPLv3+',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
