@@ -26,7 +26,7 @@ if __name__ == '__main__':
                         help="gringo grounder binary (Default to 'gringo')", metavar="G")
 
     parser.add_argument("--gringo-series", dest="gringo_series", type=int, default=3, choices=[3,4],
-                        help="gringo grounder binary (Default to 'gringo')", metavar="G")
+                        help="gringo series", metavar="S")
 
                         
     args = parser.parse_args()
