@@ -38,6 +38,16 @@ class IClaspSolver(asp.ISolver):
     """
     clasp solver
     """
+    
+class IClasp2(IClaspSolver):
+    """
+    clasp 2 series
+    """
+
+class IClasp3(IClaspSolver):
+    """
+    clasp 3 series
+    """
 
 class IClaspHSolver(IClaspSolver):
     """

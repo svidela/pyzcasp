@@ -16,8 +16,7 @@
 # along with caspo.  If not, see <http://www.gnu.org/licenses/>.
 # -*- coding: utf-8 -*-
 
-import json, subprocess
-
+import json
 from zope import component, interface
 
 from pyzcasp import asp
@@ -58,10 +57,11 @@ class ClaspSolver(asp.Process):
         return stdout, code
         
     def answers(self):
-        if 'Witnesses' not in self.json:
+        witnesses = self.__getwitnesses__()
+        if not witnesses:
             return
         
-        for answer in self.json['Witnesses']:
+        for answer in witnesses:
             atoms = self.__filteratoms__(self.__getatoms__(answer))
             score = self.__getscore__(answer)
             if score:
@@ -69,12 +69,8 @@ class ClaspSolver(asp.Process):
             else:
                 ans = asp.AnswerSet(atoms)
             
-            yield ans     
-        
-    @property
-    def complete(self):
-        return self.__getstats__()['Complete'] == "yes"
-        
+            yield ans
+                
     @property
     def unknown(self):
         return self.json['Result'] == "UNKNOWN"
@@ -90,7 +86,23 @@ class ClaspSolver(asp.Process):
     @property
     def optimum(self):
         return self.json['Result'] == "OPTIMUM FOUND"
-                
+                        
+    def __filteratoms__(self, atoms):
+        return atoms
+        
+class Clasp2(ClaspSolver):
+    interface.implements(IClasp2)
+        
+    @property
+    def complete(self):
+        return self.__getstats__()['Complete'] == "yes"
+    
+    def __getwitnesses__(self):
+        if 'Witnesses' not in self.json:
+            return
+        else:
+            return self.json['Witnesses']
+                        
     def __getstats__(self):
         return self.json['Stats']
         
@@ -107,23 +119,47 @@ class ClaspSolver(asp.Process):
     def __getscore__(self, answer):
         if 'Opt' in answer:
             return answer['Opt']
-        
-    def __filteratoms__(self, atoms):
-        return atoms
                 
-class ClaspHSolver(ClaspSolver):
+class ClaspHSolver(Clasp2):
     interface.implements(IClaspHSolver, IClaspSubsetMinimalSolver)
     
     def __filteratoms__(self, atoms):
         return filter(lambda atom: not atom.startswith('_'), atoms)
     
-class ClaspDSolver(ClaspSolver):
+class ClaspDSolver(Clasp2):
     interface.implements(IClaspDSolver, IClaspSubsetMinimalSolver)
     
     def __getstats__(self):
         return self.json['Models']
+
+class Clasp3(ClaspSolver):
+    interface.implements(IClasp3)
+
+    @property
+    def complete(self):
+        return self.__getstats__()['More'] == "no"
+
+    def __getwitnesses__(self):
+        calls = self.json['Calls']
+        if 'Witnesses' not in self.json['Call'][calls - 1]:
+            return
+        else:
+            return self.json['Call'][calls - 1]['Witnesses']
+   
+    def __getstats__(self):
+        return self.json['Models']
         
-class Clingo(ClaspSolver):
+    def __getatoms__(self, answer):
+        if 'Value' in answer:
+            return answer['Value']
+        else:
+            return []
+                    
+    def __getscore__(self, answer):
+        if 'Opt' in answer:
+            return answer['Opt'] #to be changed soon: 'Costs'
+    
+class Clingo(Clasp3):
     interface.implements(IGrounderSolver)
     
     def __init__(self, prg, allowed_returncodes = [10,20,30], strict_args=None):
@@ -157,31 +193,3 @@ class Clingo(ClaspSolver):
                         answers.append(ts)
 
         return answers
-
-    def answers(self):
-        calls = self.json['Calls']
-        if 'Witnesses' not in self.json['Call'][calls - 1]:
-            return
-        
-        for answer in self.json['Call'][calls - 1]['Witnesses']:
-            atoms = self.__filteratoms__(self.__getatoms__(answer))
-            score = self.__getscore__(answer)
-            if score:
-                ans = asp.AnswerSet(atoms, score)
-            else:
-                ans = asp.AnswerSet(atoms)
-                
-            yield ans
-
-    @property
-    def complete(self):
-        return self.__getstats__()['More'] == "no"
-                        
-    def __getstats__(self):
-        return self.json['Models']
-        
-    def __getatoms__(self, answer):
-        if 'Value' in answer:
-            return answer['Value']
-        else:
-            return []
