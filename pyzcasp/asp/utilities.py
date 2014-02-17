@@ -87,7 +87,25 @@ class EncodingRegistry(object):
 
     def encodings(self, grounder):
         return lambda name: component.getAdapter(grounder, IEncoding, name=name)
+
+class ArgumentRegistry(object):
+    interface.implements(IArgumentRegistry)
+    
+    def __init__(self):
+        super(ArgumentRegistry, self).__init__()
+    
+    def register(self, name, args, iprocess):
+        @interface.implementer(IArgument)
+        @component.adapter(iprocess)
+        def argument(process):
+            return args
             
+        gsm = component.getGlobalSiteManager()    
+        gsm.registerAdapter(argument, (iprocess,), IArgument, name)
+
+    def arguments(self, process):
+        return lambda name: component.getAdapter(process, IArgument, name=name)
+
 class Cleaner(object):
     interface.implements(ICleaner)
     

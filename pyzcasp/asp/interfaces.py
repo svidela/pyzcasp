@@ -188,6 +188,20 @@ class IEncoding(interface.Interface):
     """
     """
     
+
+class IArgumentRegistry(interface.Interface):
+    """
+    """
+    
+    def register(self, name, args, iprocess):
+        """"""
+        
+    def encodings(self, iprocess):
+        """"""
+
+class IArgument(interface.Interface):
+    """
+    """
     
 class ICleaner(interface.Interface):
     """

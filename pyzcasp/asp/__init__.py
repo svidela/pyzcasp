@@ -31,3 +31,4 @@ gsm.registerAdapter(GrounderSolver)
 
 gsm.registerUtility(Cleaner(), ICleaner)
 gsm.registerUtility(EncodingRegistry(), IEncodingRegistry)
+gsm.registerUtility(ArgumentRegistry(), IArgumentRegistry)
