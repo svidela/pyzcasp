@@ -14,8 +14,8 @@ def main(args):
     c(k).
     """
     
-    clingo.run(myprog, grounder_args=["-c k=2"], solver_args=["0"])
-    for termset in clingo:
+    solutions = clingo.run(myprog, grounder_args=["-c k=2"], solver_args=["0"])
+    for termset in solutions:
         print [term for term in termset]
 
 if __name__ == '__main__':

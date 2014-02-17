@@ -11,7 +11,7 @@ def main(args):
     
     encodings = component.getUtility(asp.IEncodingRegistry).encodings(gringo)
     
-    models = clingo.run(grounder_args=["-c k=2", encodings('enco-1')], solver_args=["0"], lazy=False)
+    models = clingo.run(grounder_args=["-c k=2", encodings('enco-1')], solver_args=["0"])
     print [term for term in models[0]]
     print [term for term in models[1]]
 
