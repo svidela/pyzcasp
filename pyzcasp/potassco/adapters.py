@@ -43,7 +43,7 @@ class MetaGrounderSolver(asp.GrounderSolver):
         self.grounder = grounder
         self.optimize = asp.TermSet()
         
-    def run(self, lp="", grounder_args=[], solver_args=[], lazy=True):
+    def run(self, lp="", grounder_args=[], solver_args=[], adapter=None, termset_filter=None):
         if '--reify' not in grounder_args:
             grounder_args.append('--reify')
             
@@ -55,11 +55,22 @@ class MetaGrounderSolver(asp.GrounderSolver):
         metaO = encodings('potassco.metaO')
         
         metasp = [meta, metaD, metaO, self.optimize.to_file()]
-        return super(MetaGrounderSolver, self).run(grounding + lp, grounder_args=metasp, solver_args=solver_args, lazy=lazy)
+        return super(MetaGrounderSolver, self).run(grounding + lp, grounder_args=metasp, solver_args=solver_args, 
+                                                   adapter=adapter, termset_filter=termset_filter)
 
-    def __iter__(self):
+    def processing(self, answers, adapter=None, termset_filter=None):
+        ans = []
         with asp.Lexer() as lexer:
-            with asp.ITermSetParser(lexer) as parser:
-                for answer in self.solver.answers():
+            with asp.ITermSetParser(lexer) as parser:        
+                for answer in answers:
                     interface.directlyProvides(answer, IMetaAnswerSet)
-                    yield component.getMultiAdapter((answer, parser), asp.ITermSet)
+                    ts = component.getMultiAdapter((answer, parser), asp.ITermSet)
+                    if termset_filter:
+                        ts = asp.TermSet(filter(termset_filter, ts))
+                        
+                    if adapter:
+                        ans.append(adapter(ts))
+                    else:
+                        ans.append(ts)
+        
+        return ans

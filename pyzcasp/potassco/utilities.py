@@ -59,16 +59,15 @@ class ClaspSolver(asp.Process):
         if 'Witnesses' not in self.json:
             return
         
-        ans = []
         for answer in self.json['Witnesses']:
             atoms = self.__filteratoms__(self.__getatoms__(answer))
             score = self.__getscore__(answer)
             if score:
-                ans.append(asp.AnswerSet(atoms, score))
+                ans = asp.AnswerSet(atoms, score)
             else:
-                ans.append(asp.AnswerSet(atoms))
-                
-        return ans        
+                ans = asp.AnswerSet(atoms)
+            
+            yield ans     
         
     @property
     def complete(self):

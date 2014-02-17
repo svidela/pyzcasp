@@ -144,20 +144,28 @@ class GrounderSolver(object):
         self.grounder = grounder
         self.solver = solver
         
-    def run(self, lp="", grounder_args=[], solver_args=[], lazy=True):
+    def run(self, lp="", grounder_args=[], solver_args=[], adapter=None, termset_filter=None):
         if lp and '-' not in grounder_args:
             grounder_args.append('-')
             
         grounding, code = self.grounder.execute(lp, *grounder_args)
         self.solver.execute(grounding, *solver_args)
         
-        self.answers = self.solver.answers()
-        if not lazy:
-            return list(iter(self))
+        return self.processing(self.solver.answers(), adapter, termset_filter)
         
-    def __iter__(self):
+    def processing(self, answers, adapter=None, termset_filter=None):
+        ans = []
         with Lexer() as lexer:
             with ITermSetParser(lexer) as parser:        
-                for answer in self.answers:
-                    yield component.getMultiAdapter((answer, parser), ITermSet)
-                    
+                for answer in answers:
+                    ts = component.getMultiAdapter((answer, parser), ITermSet)
+                    if termset_filter:
+                        ts = TermSet(filter(termset_filter, ts))
+                        
+                    if adapter:
+                        ans.append(adapter(ts))
+                    else:
+                        ans.append(ts)
+        
+        return ans
+        

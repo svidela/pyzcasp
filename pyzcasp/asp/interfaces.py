@@ -167,12 +167,11 @@ class IGrounderSolver(interface.Interface):
     grounder = interface.Attribute("Grounder")
     solver = interface.Attribute("Solver")
 
-    def run(self, lp="", grounder_args=[], solver_args=[], lazy=True):
+    def run(self, lp="", grounder_args=[], solver_args=[], adapter=None, termset_filter=None):
         """"""
-
-    def __iter__(self):
-        """
-        """
+        
+    def processing(self, answers, adapter=None, termset_filter=None):
+        """"""
     
 class IEncodingRegistry(interface.Interface):
     """
