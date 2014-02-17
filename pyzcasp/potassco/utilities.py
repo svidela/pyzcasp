@@ -38,7 +38,7 @@ class ClaspSolver(asp.Process):
         super(ClaspSolver, self).__init__(prg, allowed_returncodes)
         
     def execute(self, stdin, *args):
-        args = [arg for arg in args if not arg.startswith('--outf')]        
+        args = filter(lambda arg: not arg.startswith('--outf'), list(args))
         args.append('--outf=2')
         
         try:
@@ -50,6 +50,8 @@ class ClaspSolver(asp.Process):
                 stdout = e.stdout
                 code = e.code
                 self.json = json.loads(stdout)
+            else:
+                raise e
         
         return stdout, code
         
@@ -119,3 +121,61 @@ class ClaspDSolver(ClaspSolver):
     
     def __getstats__(self):
         return self.json['Models']
+        
+class Clingo(ClaspSolver):
+    interface.implements(IGrounderSolver)
+    
+    def __init__(self, prg, allowed_returncodes = [10,20,30]):
+        super(Clingo, self).__init__(prg, allowed_returncodes)
+        self.grounder = Gringo4(prg)
+        self.solver = self
+        
+    def run(self, lp="", grounder_args=[], solver_args=[], adapter=None, termset_filter=None):
+        if lp and '-' not in grounder_args:
+            grounder_args.append('-')
+        
+        clingo_args = filter(lambda arg: not arg.startswith('--mode'), grounder_args + solver_args)
+        self.execute(lp, *clingo_args)
+        
+        answers = list()
+        with asp.Lexer() as lexer:
+            with asp.ITermSetParser(lexer) as parser:
+                for answer in self.answers():
+                    ts = component.getMultiAdapter((answer, parser), asp.ITermSet)
+                    if termset_filter:
+                        ts = asp.TermSet(filter(termset_filter, ts))
+                        
+                    if adapter:
+                        answers.append(adapter(ts))
+                    else:
+                        answers.append(ts)
+
+        return answers
+
+    def answers(self):
+        calls = self.json['Calls']
+        if 'Witnesses' not in self.json['Call'][calls - 1]:
+            return
+        
+        for answer in self.json['Call'][calls - 1]['Witnesses']:
+            atoms = self.__filteratoms__(self.__getatoms__(answer))
+            score = self.__getscore__(answer)
+            if score:
+                ans = asp.AnswerSet(atoms, score)
+            else:
+                ans = asp.AnswerSet(atoms)
+                
+            yield ans
+
+    @property
+    def complete(self):
+        return self.__getstats__()['More'] == "no"
+                        
+    def __getstats__(self):
+        return self.json['Models']
+        
+    def __getatoms__(self, answer):
+        if 'Value' in answer:
+            return answer['Value']
+        else:
+            return []

@@ -34,7 +34,6 @@ class IGringo4(IGringoGrounder):
     gringo 4 grounder
     """
 
-
 class IClaspSolver(asp.ISolver):
     """
     clasp solver
@@ -64,3 +63,9 @@ class IMetaGrounderSolver(asp.IGrounderSolver):
     """
     
     optimize = interface.Attribute("Optimization method as expected by metasp encodings")
+
+class IGrounderSolver(asp.IGrounderSolver):
+    """
+    Marker interface for Potassco grounder & solver
+    """
+    
