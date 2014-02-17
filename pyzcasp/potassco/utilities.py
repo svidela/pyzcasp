@@ -34,13 +34,15 @@ class Gringo4(asp.Process):
 class ClaspSolver(asp.Process):
     interface.implements(IClaspSolver)
     
-    def __init__(self, prg, allowed_returncodes = [10,20,30]):
-        super(ClaspSolver, self).__init__(prg, allowed_returncodes)
+    def __init__(self, prg, allowed_returncodes = [10,20,30], strict_args=None):
+        if strict_args:
+            strict_args.update({'--outf': 2})
+        else:
+            strict_args = {'--outf': 2}
+            
+        super(ClaspSolver, self).__init__(prg, allowed_returncodes, strict_args)
         
     def execute(self, stdin, *args):
-        args = filter(lambda arg: not arg.startswith('--outf'), list(args))
-        args.append('--outf=2')
-        
         try:
             stdout, code = super(ClaspSolver, self).execute(stdin, *args)
             self.json = json.loads(stdout)
@@ -124,16 +126,21 @@ class ClaspDSolver(ClaspSolver):
 class Clingo(ClaspSolver):
     interface.implements(IGrounderSolver)
     
-    def __init__(self, prg, allowed_returncodes = [10,20,30]):
-        super(Clingo, self).__init__(prg, allowed_returncodes)
-        self.grounder = Gringo4(prg)
+    def __init__(self, prg, allowed_returncodes = [10,20,30], strict_args=None):
+        if strict_args:
+            strict_args.update({'--mode': 'clingo'})
+        else:
+            strict_args = {'--mode': 'clingo'}
+            
+        super(Clingo, self).__init__(prg, allowed_returncodes, strict_args)
+        self.grounder = Gringo4(prg, allowed_returncodes = [0,10], strict_args={'--mode': 'gringo'})
         self.solver = self
         
     def run(self, lp="", grounder_args=[], solver_args=[], adapter=None, termset_filter=None):
         if lp and '-' not in grounder_args:
             grounder_args.append('-')
         
-        clingo_args = filter(lambda arg: not arg.startswith('--mode'), grounder_args + solver_args)
+        clingo_args = grounder_args + solver_args
         self.execute(lp, *clingo_args)
         
         answers = list()

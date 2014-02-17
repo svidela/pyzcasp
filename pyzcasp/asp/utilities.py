@@ -27,12 +27,21 @@ from impl import *
 class Process(object):
     interface.implements(IProcess)
     
-    def __init__(self, prg, allowed_returncodes = [0]):
+    def __init__(self, prg, allowed_returncodes = [0], strict_args=None):
         self.prg = prg
         self.allowed_returncodes = allowed_returncodes
+        self.strict_args = strict_args or dict()
         
     def execute(self, stdin, *args):
-        args = list(chain.from_iterable(map(lambda arg: arg.split(), args)))
+        largs = list(args)
+        for strict, value in self.strict_args.iteritems():
+            largs = filter(lambda arg: not arg.startswith(strict), largs)
+            if value:
+                largs.append("{0}={1}".format(strict, value))
+            else:
+                largs.append(strict)
+            
+        args = list(chain.from_iterable(map(lambda arg: arg.split(), largs)))
         try:
             self.__popen = subprocess.Popen([self.prg] + args, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
                 
