@@ -33,3 +33,5 @@ reg = component.getUtility(asp.IEncodingRegistry)
 reg.register('potassco.meta', root + '/encodings/meta.lp', IGringo3)
 reg.register('potassco.metaD', root + '/encodings/metaD.lp', IGringo3)
 reg.register('potassco.metaO', root + '/encodings/metaO.lp', IGringo3)
+
+reg.register('potassco.iclingo', root + '/encodings/iclingo-int.lp', IGringo4)

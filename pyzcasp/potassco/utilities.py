@@ -138,13 +138,16 @@ class Clasp3(ClaspSolver):
     @property
     def complete(self):
         return self.__getstats__()['More'] == "no"
+        
+    @property
+    def calls(self):
+        return self.json['Calls']
 
     def __getwitnesses__(self):
-        calls = self.json['Calls']
-        if 'Witnesses' not in self.json['Call'][calls - 1]:
+        if 'Witnesses' not in self.json['Call'][self.calls - 1]:
             return
         else:
-            return self.json['Call'][calls - 1]['Witnesses']
+            return self.json['Call'][self.calls - 1]['Witnesses']
    
     def __getstats__(self):
         return self.json['Models']
