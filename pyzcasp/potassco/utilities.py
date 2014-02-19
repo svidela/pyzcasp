@@ -163,7 +163,7 @@ class Clasp3(ClaspSolver):
             return answer['Opt'] #to be changed soon: 'Costs'
     
 class Clingo(Clasp3):
-    interface.implements(IGrounderSolver)
+    interface.implements(IClingo)
     
     def __init__(self, prg, allowed_returncodes = [10,20,30], strict_args=None):
         if strict_args:

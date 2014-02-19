@@ -79,3 +79,7 @@ class IGrounderSolver(asp.IGrounderSolver):
     Marker interface for Potassco grounder & solver
     """
     
+class IClingo(IGrounderSolver):
+    """
+    """
+    
