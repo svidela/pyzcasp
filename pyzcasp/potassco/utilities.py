@@ -159,8 +159,8 @@ class Clasp3(ClaspSolver):
             return []
                     
     def __getscore__(self, answer):
-        if 'Opt' in answer:
-            return answer['Opt'] #to be changed soon: 'Costs'
+        if 'Costs' in answer:
+            return answer['Costs']
     
 class Clingo(Clasp3):
     interface.implements(IClingo)
