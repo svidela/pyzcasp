@@ -97,8 +97,9 @@ class Term(object):
 class TermSet(set):
     interface.implements(ITermSet)
     
-    def __init__(self, terms=[]):
+    def __init__(self, terms=[], score=None):
         super(TermSet, self).__init__(terms)
+        self.score = score
         
     def to_file(self, filename=None):
         if filename:

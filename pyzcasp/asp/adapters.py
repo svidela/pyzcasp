@@ -160,7 +160,7 @@ class GrounderSolver(object):
                 for answer in answers:
                     ts = component.getMultiAdapter((answer, parser), ITermSet)
                     if termset_filter:
-                        ts = TermSet(filter(termset_filter, ts))
+                        ts = TermSet(filter(termset_filter, ts), ts.score)
                         
                     if adapter:
                         ans.append(adapter(ts))

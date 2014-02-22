@@ -66,7 +66,7 @@ class MetaGrounderSolver(asp.GrounderSolver):
                     interface.directlyProvides(answer, IMetaAnswerSet)
                     ts = component.getMultiAdapter((answer, parser), asp.ITermSet)
                     if termset_filter:
-                        ts = asp.TermSet(filter(termset_filter, ts))
+                        ts = asp.TermSet(filter(termset_filter, ts), ts.score)
                         
                     if adapter:
                         ans.append(adapter(ts))
