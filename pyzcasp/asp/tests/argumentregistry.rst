@@ -22,7 +22,7 @@ we get the arguments for the grounder and solver at hand using::
     >>> grounder_args = component.getUtility(asp.IArgumentRegistry).arguments(grounder)
     >>> solver_args = component.getUtility(asp.IArgumentRegistry).arguments(solver)
     
-and we ask for a specific arguments by their name::    
+and we ask for specific arguments by their name::    
     
     >>> grounder_args('package.fun.args') == ["-c k={k}"]
     True
