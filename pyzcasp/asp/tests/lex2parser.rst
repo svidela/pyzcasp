@@ -11,6 +11,15 @@ First, we simply test that we can adapt a ``Lexer`` instance to a ``ITermSetPars
 
 Now, let's see that the parser is able to parse an atom (string) as given by ASP solvers, to an instance providing ``ITerm``::
 
+    >>> atom = 'predicate'
+    >>> term = parser.parse(atom)
+    >>> ITerm in providedBy(term)
+    True
+    >>> term
+    Term('predicate')
+    
+An atom can also be a predicate symbol followed by a list of terms::
+
     >>> atom = 'predicate(6,"string",1,atom,nested(1,2))'
     >>> term = parser.parse(atom)
     >>> ITerm in providedBy(term)
