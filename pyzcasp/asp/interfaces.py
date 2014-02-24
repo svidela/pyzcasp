@@ -20,65 +20,123 @@ from zope import interface
 
 class INativeTerm(interface.Interface):
     """
+    Represents a function symbol name without arguments
     """
     name = interface.Attribute("Term name")
     
+    def __init__(self, name):
+        """
+        Constructor
+        
+        :param str name: term name
+        """
+        
     def __str__(self):
-        """"""
+        """
+        Returns name
+        """
         
     def __repr__(self):
-        """"""
+        """
+        Returns name
+        """
         
-    def __eq__(self):
-        """"""
+    def __eq__(self, other):
+        """
+        Compare by name
+        """
     
-    def __ne__(self):
-        """"""
+    def __ne__(self, other):
+        """
+        Compare by name
+        """
         
     def __hash__(self):
-        """"""
+        """
+        Hash by name
+        """
 
 class ITerm(interface.Interface):
     """
-    Term pyasp object
+    Represents a term as a function symbol followed by a list of arguments.
+    String arguments are automatically escaped, e.g. 'a' becomes '"a"' in order
+    to avoid conlfict with uppercase strings. To avoid this, use an instance
+    of NativeTerm. Number arguments must be integers.
     """
     
     pred = interface.Attribute("Term predicate name")
     args = interface.Attribute("Term arguments list")
+    
+    def __init__(self, predicate, arguments=[]):
+        """
+        Constructor
+        
+        :param str predicate: term name
+        :param list arguments: list of arguments
+        """
             
     def __str__(self):
-        """"""
+        """
+        Term as string
+        """
         
     def __repr__(self):
-        """"""
+        """
+        Term object representation
+        """
         
-    def __eq__(self):
-        """"""
+    def __eq__(self, other):
+        """
+        Compare by pred and args
+        """
+
+    def __ne__(self, other):
+        """
+        Compare by pred and args
+        """
         
     def __hash__(self):
-        """"""
+        """
+        Hash by ([pred] + args)
+        """
     
 class ITermSet(interface.Interface):
     """
-    TermSet pyasp object
+    Represents a set of terms objects. Typically used to describe an input instance
+    and resulting answer sets.
     """
     
-    score = interface.Attribute("Score(s)")
+    score = interface.Attribute("List of score(s) if any")
+    
+    def __init__(self, terms=[], score=None):
+        """
+        Constructor
+        
+        :param list terms: list of terms objects
+        :param list score: list of score(s)
+        """
     
     def to_file(self, filename=None):
         """
-        Write terms to filename or temp file.
-        Returns a file descriptor object.
+        Write terms to filename or temp file. If filename==None, the filename is collected
+        in the ICleaner utility for a proper cleaning using @cleanrun decorator.
+        
+        :param str filename: an optional filename
+        :returns: a file descriptor object.
         """
     
     def add(self, term):
         """
         Adds a term to the TermSet
+        
+        :param Term term: a Term object
         """
         
     def union(self, other):
         """
-        Return the union of self and other TermSet
+        Returns the union of self and other TermSet
+        
+        :param TermSet other: other TermSet object
         """
         
     def __iter__(self):
@@ -112,40 +170,61 @@ class ITermSetParser(IParser):
 
 class IProcess(interface.Interface):
     """
-    System calls
+    Represents a program to be executed using system calls
     """
-    
-    def execute(self):
+
+    def __init__(self, prg, allowed_returncodes = [0], strict_args=None):
         """
+        Constructor
+        
+        :param str prg: excutable command
+        :param list allowed_returncodes: list of allowed code by `prg`
+        :param dict strict_args: mapping of fixed arguments
+        """
+        
+    def execute(self, stdin, *args):
+        """
+        Execute the program via a system call.
+        An Exception is raised if the `prg` is not found. A ProcessError exception is raised
+        if the returned code is not in the allowed_returncodes.
+        
+        :param str stdin: a valid input for `prg`
+        :param list *args: any accepted argument by `prg`
+        
+        :returns: tuple with standard output from `prg` and its returned code
         """
 
 class IGrounder(IProcess):
     """
-    ASP grounder
+    Represents an ASP grounder program
     """
     
 class ISolver(IProcess):
     """
-    ASP Solver
+    Represents an ASP solver program
     """
     
-    complete = interface.Attribute("")
-    unknown = interface.Attribute("")
-    unsat = interface.Attribute("")
-    sat = interface.Attribute("")
-    optimum = interface.Attribute("")
+    complete = interface.Attribute("True if the solving was completed, False otherwise")
+    unknown = interface.Attribute("True if SAT is unknown, False otherwise")
+    unsat = interface.Attribute("True if the solving was UNSAT, False otherwise")
+    sat = interface.Attribute("True if the solving was SAT, False otherwise")
+    optimum = interface.Attribute("True if the solving found an optimum, False otherwise")
     
     def __getstats__(self):
-        """"""
+        """
+        """
         
     def __getatoms__(self, answer):
-        """"""
+        """
+        """
         
     def __getscore__(self, answer):
-        """"""
+        """
+        """
         
     def __filteratoms__(self, atoms):
-        """"""
+        """
+        """
         
 class ISubsetMinimalSolver(interface.Interface):
     """
