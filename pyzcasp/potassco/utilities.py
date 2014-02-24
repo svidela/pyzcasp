@@ -188,7 +188,7 @@ class Clingo(Clasp3):
                 for answer in self.answers():
                     ts = component.getMultiAdapter((answer, parser), asp.ITermSet)
                     if termset_filter:
-                        ts = asp.TermSet(filter(termset_filter, ts))
+                        ts = asp.TermSet(filter(termset_filter, ts), ts.score)
                         
                     if adapter:
                         answers.append(adapter(ts))
