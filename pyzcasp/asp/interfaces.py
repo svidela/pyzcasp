@@ -18,44 +18,6 @@
 
 from zope import interface
 
-class INativeTerm(interface.Interface):
-    """
-    Represents a function symbol name without arguments
-    """
-    name = interface.Attribute("Term name")
-    
-    def __init__(self, name):
-        """
-        Constructor
-        
-        :param str name: term name
-        """
-        
-    def __str__(self):
-        """
-        Returns name
-        """
-        
-    def __repr__(self):
-        """
-        Returns name
-        """
-        
-    def __eq__(self, other):
-        """
-        Compare by name
-        """
-    
-    def __ne__(self, other):
-        """
-        Compare by name
-        """
-        
-    def __hash__(self):
-        """
-        Hash by name
-        """
-
 class ITerm(interface.Interface):
     """
     Represents a term as a function symbol followed by a list of arguments.

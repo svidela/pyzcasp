@@ -25,9 +25,9 @@ An atom can also be a predicate symbol followed by a list of terms::
     >>> ITerm in providedBy(term)
     True
     >>> term
-    Term('predicate',[6,'"string"',1,'atom',Term('nested',[1,2])])
+    Term('predicate',[6,'"string"',1,Term('atom'),Term('nested',[1,2])])
     >>> term.arg(0), term.arg(1), term.arg(2), term.arg(3), term.arg(4)
-    (6, 'string', 1, 'atom', Term('nested',[1,2]))
+    (6, 'string', 1, Term('atom'), Term('nested',[1,2]))
     
 The issue with the code above is that lex and yacc generate some auxiliary files::
 
@@ -43,7 +43,7 @@ Thus, to remove this files automatically, our ``Lexer`` and ``ITermSetParser`` s
     ...         term = parser.parse(atom)
     ...
     >>> term
-    Term('predicate',[6,'"string"',1,'atom',Term('nested',[1,2])])
+    Term('predicate',[6,'"string"',1,Term('atom'),Term('nested',[1,2])])
     >>> for f in aux:
     ...     assert(not os.path.isfile(f))
     ...

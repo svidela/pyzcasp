@@ -1,11 +1,11 @@
 Required imports::
 
     >>> from zope.interface import providedBy
-    >>> from pyzcasp.asp import NativeTerm, Term, ITerm
+    >>> from pyzcasp.asp import Term, ITerm
 
 We start creating a ``Term`` instance with some arguments and check it provides ``ITerm``::
 
-    >>> term1 = Term('predicate', [1,u'unicode', 'string', NativeTerm('native')])
+    >>> term1 = Term('predicate', [1,u'unicode', 'string', Term('native')])
     >>> ITerm in providedBy(term1)
     True
 
@@ -14,9 +14,9 @@ We can get the predicate name and its arguments by using::
     >>> term1.pred
     'predicate'
     >>> term1.args
-    [1, u'"unicode"', '"string"', 'native']
+    [1, u'"unicode"', '"string"', Term('native')]
     >>> term1.arg(0), term1.arg(1), term1.arg(2), term1.arg(3)
-    (1, u'unicode', 'string', 'native')
+    (1, u'unicode', 'string', Term('native'))
 
 ``Term`` instances implement ``__str__``::
 
@@ -41,7 +41,7 @@ Instances of ``Term`` are comparable and hashable::
     False
     >>> term1 != noargs
     True
-    >>> term2 = Term('predicate', [1,u'unicode', 'string', NativeTerm('native')])
+    >>> term2 = Term('predicate', [1,u'unicode', 'string', Term('native')])
     >>> term1 == term2
     True
     >>> hash(term1) == hash(term2) 
@@ -51,7 +51,7 @@ Instances of ``Term`` are comparable and hashable::
 ``Term`` instances implement `__repr__`::
 
     >>> term1
-    Term('predicate',[1,u'"unicode"','"string"','native'])
+    Term('predicate',[1,u'"unicode"','"string"',Term('native')])
     >>> noargs
     Term('noargs')
 

@@ -2,7 +2,7 @@ Required imports::
 
     >>> from zope import component
     >>> from zope.interface import providedBy
-    >>> from pyzcasp.asp import Term, NativeTerm, Lexer, AnswerSet, ITermSetParser, ITermSet
+    >>> from pyzcasp.asp import Term, Lexer, AnswerSet, ITermSetParser, ITermSet
 
 Let's create a simple ``AnswerSet`` instance and together with a parser, (multi-)adapt them to ``ITermSet``::
 
@@ -13,7 +13,7 @@ Let's create a simple ``AnswerSet`` instance and together with a parser, (multi-
     ...
     >>> len(termset)
     2
-    >>> Term('predicate',[6,'string',1,NativeTerm('term'),Term('nested',[1,2])]) in termset
+    >>> Term('predicate',[6,'string',1,Term('term'),Term('nested',[1,2])]) in termset
     True
     >>> Term('predicate',[6,1]) in termset
     True

@@ -120,7 +120,7 @@ class Lexer2TermSetParser(ParserAdapter):
             elif re.match(self.lex.t_STRING, t[1]):
                 t[0] = t[1][1:-1]
             else:
-                t[0] = NativeTerm(t[1])
+                t[0] = Term(t[1])
         else:
             t[0] = Term(t[1], t[3])
 
