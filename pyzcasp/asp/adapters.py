@@ -151,13 +151,20 @@ class GrounderSolver(object):
         grounding, code = self.grounder.execute(lp, *grounder_args)
         self.solver.execute(grounding, *solver_args)
         
-        return self.processing(self.solver.answers(), adapter, termset_filter)
+        return IAnswerSetsProcessing(self.solver).processing(adapter, termset_filter)
         
-    def processing(self, answers, adapter=None, termset_filter=None):
+class AnswerSetsProcessing(object):
+    component.adapts(ISolver)
+    interface.implements(IAnswerSetsProcessing)
+    
+    def __init__(self, solver):
+        self.solver = solver
+        
+    def processing(self, adapter=None, termset_filter=None):
         ans = []
         with Lexer() as lexer:
             with ITermSetParser(lexer) as parser:        
-                for answer in answers:
+                for answer in self.solver.answers():
                     ts = component.getMultiAdapter((answer, parser), ITermSet)
                     if termset_filter:
                         ts = TermSet(filter(termset_filter, ts), ts.score)
@@ -168,4 +175,3 @@ class GrounderSolver(object):
                         ans.append(ts)
         
         return ans
-        

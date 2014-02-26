@@ -135,6 +135,20 @@ class ClaspDSolver(Clasp2):
 class Clasp3(ClaspSolver):
     interface.implements(IClasp3)
 
+    def answers(self):
+        for call in xrange(self.calls):
+            witnesses = self.__getwitnesses__(call)
+            if witnesses:
+                for answer in witnesses:
+                    atoms = self.__filteratoms__(self.__getatoms__(answer))
+                    score = self.__getscore__(answer)
+                    if score:
+                        ans = asp.AnswerSet(atoms, score)
+                    else:
+                        ans = asp.AnswerSet(atoms)
+            
+                    yield ans
+
     @property
     def complete(self):
         return self.__getstats__()['More'] == "no"
@@ -143,11 +157,14 @@ class Clasp3(ClaspSolver):
     def calls(self):
         return self.json['Calls']
 
-    def __getwitnesses__(self):
-        if 'Witnesses' not in self.json['Call'][self.calls - 1]:
+    def __getwitnesses__(self, call=None):
+        if call == None:
+            call = self.calls -  1
+            
+        if 'Witnesses' not in self.json['Call'][call]:
             return
         else:
-            return self.json['Call'][self.calls - 1]['Witnesses']
+            return self.json['Call'][call]['Witnesses']
    
     def __getstats__(self):
         return self.json['Models']
@@ -182,17 +199,4 @@ class Clingo(Clasp3):
         clingo_args = grounder_args + solver_args
         self.execute(lp, *clingo_args)
         
-        answers = list()
-        with asp.Lexer() as lexer:
-            with asp.ITermSetParser(lexer) as parser:
-                for answer in self.answers():
-                    ts = component.getMultiAdapter((answer, parser), asp.ITermSet)
-                    if termset_filter:
-                        ts = asp.TermSet(filter(termset_filter, ts), ts.score)
-                        
-                    if adapter:
-                        answers.append(adapter(ts))
-                    else:
-                        answers.append(ts)
-
-        return answers
+        return asp.IAnswerSetsProcessing(self.solver).processing(adapter, termset_filter)

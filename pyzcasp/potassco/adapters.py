@@ -58,15 +58,22 @@ class MetaGrounderSolver(asp.GrounderSolver):
         return super(MetaGrounderSolver, self).run(grounding + lp, grounder_args=metasp, solver_args=solver_args, 
                                                    adapter=adapter, termset_filter=termset_filter)
 
-    def processing(self, answers, adapter=None, termset_filter=None):
+class AnswerSetsProcessing(object):
+    component.adapts(IClaspDSolver)
+    interface.implements(asp.IAnswerSetsProcessing)
+    
+    def __init__(self, solver):
+        self.solver = solver
+        
+    def processing(self, adapter=None, termset_filter=None):
         ans = []
         with asp.Lexer() as lexer:
-            with asp.ITermSetParser(lexer) as parser:        
-                for answer in answers:
+            with asp.ITermSetParser(lexer) as parser:
+                for answer in self.solver.answers():
                     interface.directlyProvides(answer, IMetaAnswerSet)
                     ts = component.getMultiAdapter((answer, parser), asp.ITermSet)
                     if termset_filter:
-                        ts = asp.TermSet(filter(termset_filter, ts), ts.score)
+                        ts = TermSet(filter(termset_filter, ts), ts.score)
                         
                     if adapter:
                         ans.append(adapter(ts))

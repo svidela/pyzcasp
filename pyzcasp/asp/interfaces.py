@@ -213,7 +213,22 @@ class IGrounderSolver(interface.Interface):
         
     def processing(self, answers, adapter=None, termset_filter=None):
         """"""
+        
+class IAnswerSetsProcessing(interface.Interface):
+    """
+    Post-processing for raw answer sets
+    """
     
+    solver = interface.Attribute("Solver to get the answers")
+    
+    def processing(self, adapter=None, termset_filter=None):
+        """"
+        :param Interface adapter: interface to adapt TermSet objects
+        :param callable termset_filter: callable to filter termsets
+        
+        :return: either a list of TermSet objects or list of adaptee object providing `adapter` interface
+        """
+
 class IEncodingRegistry(interface.Interface):
     """
     """
