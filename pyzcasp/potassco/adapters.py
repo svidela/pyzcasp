@@ -62,13 +62,13 @@ class MetaGrounderSolver(object):
         ans = []
         for answer in self.solver.answers():
             interface.directlyProvides(answer, IMetaAnswerSet)
-            ts = asp.ITermSet(answer)
-            if termset_filter:
-                ts = TermSet(filter(termset_filter, ts), ts.score)
-                
             if adapter:
-                ans.append(adapter(ts))
+                ans.append(adapter(answer))
             else:
+                ts = asp.ITermSet(answer)
+                if termset_filter:
+                    ts = TermSet(filter(termset_filter, ts), ts.score)
+                    
                 ans.append(ts)
 
         return ans

@@ -17,13 +17,16 @@ class SolverMock(asp.Solver):
 
 class IScore(interface.Interface):
     score = interface.Attribute("a score")
+
+class INoAdapter(interface.Interface):
+    pass
     
 class MockAdapter(object):
-    component.adapts(asp.ITermSet)
+    component.adapts(asp.IAnswerSet)
     interface.implements(IScore)
     
-    def __init__(self, ts):
-        self.score = ts.score
+    def __init__(self, answer):
+        self.score = answer.score
     
     def __repr__(self):
         return "%s" % self.score
@@ -35,5 +38,6 @@ def setup_test(test):
     test.globs['fake_grounder'] = GrounderMock(None)
     test.globs['fake_solver'] = SolverMock(None)
     test.globs['IScore'] = IScore
+    test.globs['INoAdapter'] = INoAdapter
 
 setup_test.__test__ = False
