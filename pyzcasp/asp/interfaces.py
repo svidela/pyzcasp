@@ -110,26 +110,26 @@ class ITermSet(interface.Interface):
         """
         Return number of terms in the TermSet
         """
+            
+class IGrammar(interface.Interface):
+    """
+    Grammar pyparsing object
+    """
+    
+    term = interface.Attribute("token object for term")
+    function = interface.Attribute("token object for a function (including constant)")
+    integer = interface.Attribute("token object for an integer")
+    
+    def parse(self, string, parseAll=True):
+        """
+        Parse a string using self.term.parseString
         
-class ILexer(interface.Interface):
-    """
-    Lexer object
-    """
+        :param str string: string representation of a term
+        :param bool parseAll: True to force parsing all the string, False otherwise
+        
+        :return: pyparsing.ParseResult object
+        """
     
-    lexer = interface.Attribute("PLY Lexer object")
-    
-class IParser(interface.Interface):
-    """
-    Parser object
-    """
-    
-    parser = interface.Attribute("PLY Parser object")
-    
-class ITermSetParser(IParser):
-    """
-    Paser of TermSet objects
-    """
-
 class IProcess(interface.Interface):
     """
     Represents a program to be executed using system calls
@@ -223,10 +223,10 @@ class IAnswerSetsProcessing(interface.Interface):
     
     def processing(self, adapter=None, termset_filter=None):
         """"
-        :param Interface adapter: interface to adapt TermSet objects
-        :param callable termset_filter: callable to filter termsets
+        :param Interface adapter: interface to adapt AnswerSet objects. If none ITermSet is used
+        :param callable termset_filter: callable to filter termsets if no adapter == None
         
-        :return: either a list of TermSet objects or list of adaptee object providing `adapter` interface
+        :return: either a list of (filtered) ITermSet objects or list of adaptee object providing `adapter` interface
         """
 
 class IEncodingRegistry(interface.Interface):

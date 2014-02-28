@@ -104,6 +104,7 @@ class AnswerSet(object):
         self.score = score
         
 class Grammar(object):
+    interface.implements(IGrammar)
     
     def __init__(self):
         lp = pypa.Suppress(pypa.Literal("("))
@@ -120,8 +121,8 @@ class Grammar(object):
         #  - convert integers
         #  - convert predicates/functions and constants (predicate or function without args)
         #  - remove quotes from strings
-        self.integer.setParseAction(lambda s,l,t: int(t[0]))
-        self.function.setParseAction(lambda s,l,t: Term(t['pred'],t['args']))
+        self.integer.setParseAction(lambda t: int(t[0]))
+        self.function.setParseAction(lambda t: Term(t['pred'],t['args']))
         pypa.quotedString.setParseAction(pypa.removeQuotes)
     
         # complete the recursive definition started with Forward

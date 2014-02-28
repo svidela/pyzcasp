@@ -2,7 +2,7 @@ Required imports::
 
     >>> from zope import component
     >>> from zope.interface import providedBy
-    >>> from pyzcasp.asp import Term, AnswerSet, ITermSetParser, ITermSet
+    >>> from pyzcasp.asp import Term, AnswerSet, ITermSet
 
 Let's create a simple ``AnswerSet`` instance and adapt it to ``ITermSet``::
 
