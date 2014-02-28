@@ -27,7 +27,7 @@ But also, we can add custom parse actions (see pyparsing docs)::
     >>> f
     ['term', 'nested', 'predicate']
     
-Since we used ``addParseAction``, we still get the ``Term`` object
+Since we used ``addParseAction``, we still get the ``Term`` object::
     
     >>> atom1 == atom2
     True
@@ -36,11 +36,22 @@ Instead, if we use ``setParseAction`` we can access directly to ParseResult obje
 
     >>> f = []
     >>> r = fun.setParseAction(lambda t: f.append(t[0]))
-    >>> atom3 = parser.parseString('predicate(6,"string",1,term,nested(1,2))', True)[0]
+    >>> atom3 = parser.parseString('predicate(6,"string",1,term,nested(1,2))', True)
     >>> f
     ['term', 'nested', 'predicate']
     
 But the final result is no longer a ``Term`` object::
     
-    >>> atom3
+    >>> atom3[0]
     'predicate'
+    >>> atom3[1].asList()
+    [6, 'string', 1, 'term', [], 'nested', [1, 2]]
+
+Note that the ``grammar`` function also returns the token object for numbers, so could set or add actions to it::
+
+    >>> n = []
+    >>> r = num.addParseAction(lambda t: n.append(t[0] + 10))
+    >>> atom4 = parser.parseString('predicate(6,"string",1,term,nested(1,2))', True)
+    >>> n
+    [16, 11, 11, 12]
+
