@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with caspo.  If not, see <http://www.gnu.org/licenses/>.
 # -*- coding: utf-8 -*-
+import os
 
 from adapters import *
 from interfaces import *
@@ -28,8 +29,8 @@ gsm = component.getGlobalSiteManager()
 gsm.registerAdapter(MetaAnswerSet2TermSet)
 gsm.registerAdapter(MetaGrounderSolver)
 
-root = __file__.rsplit('/', 1)[0]
+root = os.path.dirname(__file__)
 reg = component.getUtility(asp.IEncodingRegistry)
-reg.register('potassco.meta', root + '/encodings/meta.lp', IGringo3)
-reg.register('potassco.metaD', root + '/encodings/metaD.lp', IGringo3)
-reg.register('potassco.metaO', root + '/encodings/metaO.lp', IGringo3)
+reg.register('potassco.meta',  os.path.join(root, 'encodings/meta.lp'),  IGringo3)
+reg.register('potassco.metaD', os.path.join(root, 'encodings/metaD.lp'), IGringo3)
+reg.register('potassco.metaO', os.path.join(root, 'encodings/metaO.lp'), IGringo3)
