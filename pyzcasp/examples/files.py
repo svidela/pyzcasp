@@ -40,8 +40,8 @@ if __name__ == '__main__':
         grounder = potassco.Gringo4(args.gringo)
         gsm.registerUtility(grounder, potassco.IGringo4)
         
-    solver = potassco.ClaspSolver(args.clasp)
-    gsm.registerUtility(solver, potassco.IClaspSolver)
+    solver = potassco.Clasp2(args.clasp)
+    gsm.registerUtility(solver, potassco.IClasp2)
     
     gsm.registerUtility(asp.EncodingRegistry(), asp.IEncodingRegistry, 'example')
 
