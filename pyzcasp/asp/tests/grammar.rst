@@ -28,7 +28,7 @@ But also, we can add custom parse actions (see pyparsing docs)::
     ['term', 'nested', 'predicate']
     
 Since we used ``addParseAction``, we still get the ``Term`` object::
-    
+
     >>> atom1 == atom2
     True
     
