@@ -19,7 +19,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1dev'
+version = '1.0.0dev'
 
 setup(name='pyzcasp',
       version=version,
