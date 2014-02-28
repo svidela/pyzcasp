@@ -25,7 +25,6 @@ from zope.component import getGlobalSiteManager
 
 gsm = getGlobalSiteManager()
 
-gsm.registerAdapter(Lexer2TermSetParser, (ILexer,), ITermSetParser)
 gsm.registerAdapter(AnswerSet2TermSet)
 gsm.registerAdapter(GrounderSolver)
 gsm.registerAdapter(AnswerSetsProcessing)

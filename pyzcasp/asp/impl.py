@@ -18,7 +18,7 @@
 
 import os, tempfile
 from zope import component
-from ply import lex
+import pyparsing as pypa
 import re
 
 from interfaces import *
@@ -103,51 +103,29 @@ class AnswerSet(object):
         self.atoms = atoms
         self.score = score
         
-class Lexer(object):
-    interface.implements(ILexer)
+def grammar():
+    lp = pypa.Suppress(pypa.Literal("("))
+    rp = pypa.Suppress(pypa.Literal(")"))
     
-    STRING  = 'STRING'
-    IDENT   = 'IDENT'
-    MIDENT  = 'MIDENT'
-    NUM     = 'NUM'
-    LP      = 'LP'
-    RP      = 'RP'
-    COMMA   = 'COMMA'
-    SPACE   = 'SPACE'
-
-    # Tokens
-    t_STRING = r'"[^"\\]*(?:\\.[^"\\]*)*"' #r'"((\\")|[^"])*"'
-    t_IDENT = r'[a-zA-Z_][a-zA-Z0-9_]*'
-    t_MIDENT = r'-[a-zA-Z_][a-zA-Z0-9_]*'
-    t_NUM = r'-?[0-9]+'
-    t_LP = r'\('
-    t_RP = r'\)'
-    t_COMMA = r','
-    t_SPACE = r'[ \t\.]+'
-
-    tokens = (STRING, IDENT, MIDENT, NUM, LP, RP, COMMA, SPACE)
+    # used for recursive definition in `function` Token below
+    term = pypa.Forward()
+    terms = pypa.delimitedList(term)
+    integer = pypa.Combine(pypa.Optional(pypa.Literal('+') ^ pypa.Literal('-')) + pypa.Word(pypa.nums))
+    # TODO: the string '_' should not be accepted
+    function = pypa.Word(pypa.alphas + '_', pypa.alphanums + '_') + pypa.Group(pypa.Optional(lp + pypa.Optional(terms) + rp))
     
-    def __init__(self):
-        super(Lexer, self).__init__()
-        self.lexer = lex.lex(object=self, optimize=1)
-        
-    def __enter__(self):
-        return self
-        
-    def __exit__(self, type, value, traceback):
-        if os.path.isfile("lextab.py"):
-            os.remove("lextab.py")
-            
-        if os.path.isfile("lextab.pyc"):
-            os.remove("lextab.pyc")
-        
-    def t_newline(self, t):
-        r'\n+'
-        t.lexer.lineno += t.value.count("\n")
+    # default actions:
+    #  - convert integers
+    #  - convert predicates/functions and constants (predicate or function without args)
+    #  - remove quotes from strings
+    integer.setParseAction(lambda s,l,t: int(t[0]))
+    function.setParseAction(lambda s,l,t: Term(t[0],t[1]))
+    pypa.quotedString.setParseAction(pypa.removeQuotes)
+    
+    # complete the recursive definition started with Forward
+    term << (function ^ integer ^ pypa.quotedString)
 
-    def t_error(self, t):
-        print "Illegal character '%s'" % t.value[0]
-        t.lexer.skip(1)
+    return term, function, integer
 
 
 def cleanrun(fn):
