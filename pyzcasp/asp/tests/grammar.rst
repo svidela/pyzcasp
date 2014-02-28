@@ -31,7 +31,7 @@ Since we used ``addParseAction``, we still get the ``Term`` object::
 
     >>> atom1 == atom2
     True
-    
+
 Instead, if we use ``setParseAction`` we can access directly to ParseResult objects::
 
     >>> f = []
