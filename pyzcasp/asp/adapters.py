@@ -55,10 +55,10 @@ class AnswerSet2TermSet(TermSetAdapter):
     
     def __init__(self, answer):
         super(AnswerSet2TermSet, self).__init__()
-        parser, fun, num = grammar()
+        parser = Grammar()
         for atom in answer.atoms:
             # raise pyparsing.ParseException if cannot parse
-            self._termset.add(parser.parseString(atom, True)[0])
+            self._termset.add(parser.parse(atom)[0])
         
         self._termset.score = answer.score
 

@@ -103,30 +103,32 @@ class AnswerSet(object):
         self.atoms = atoms
         self.score = score
         
-def grammar():
-    lp = pypa.Suppress(pypa.Literal("("))
-    rp = pypa.Suppress(pypa.Literal(")"))
+class Grammar(object):
     
-    # used for recursive definition in `function` Token below
-    term = pypa.Forward()
-    terms = pypa.delimitedList(term)
-    integer = pypa.Combine(pypa.Optional(pypa.Literal('+') ^ pypa.Literal('-')) + pypa.Word(pypa.nums))
-    # TODO: the string '_' should not be accepted
-    function = pypa.Word(pypa.alphas + '_', pypa.alphanums + '_')("pred") + pypa.Group(pypa.Optional(lp + pypa.Optional(terms) + rp))("args")
+    def __init__(self):
+        lp = pypa.Suppress(pypa.Literal("("))
+        rp = pypa.Suppress(pypa.Literal(")"))
     
-    # default actions:
-    #  - convert integers
-    #  - convert predicates/functions and constants (predicate or function without args)
-    #  - remove quotes from strings
-    integer.setParseAction(lambda s,l,t: int(t[0]))
-    function.setParseAction(lambda s,l,t: Term(t['pred'],t['args']))
-    pypa.quotedString.setParseAction(pypa.removeQuotes)
+        # used for recursive definition in `function` Token below
+        self.term = pypa.Forward()
+        terms = pypa.delimitedList(self.term)
+        self.integer = pypa.Combine(pypa.Optional(pypa.Literal('+') ^ pypa.Literal('-')) + pypa.Word(pypa.nums))
+        # TODO: the string '_' should not be accepted
+        self.function = pypa.Word(pypa.alphas + '_', pypa.alphanums + '_')("pred") + pypa.Group(pypa.Optional(lp + pypa.Optional(terms) + rp))("args")
     
-    # complete the recursive definition started with Forward
-    term << (function ^ integer ^ pypa.quotedString)
+        # default actions:
+        #  - convert integers
+        #  - convert predicates/functions and constants (predicate or function without args)
+        #  - remove quotes from strings
+        self.integer.setParseAction(lambda s,l,t: int(t[0]))
+        self.function.setParseAction(lambda s,l,t: Term(t['pred'],t['args']))
+        pypa.quotedString.setParseAction(pypa.removeQuotes)
+    
+        # complete the recursive definition started with Forward
+        self.term << (self.function ^ self.integer ^ pypa.quotedString)
 
-    return term, function, integer
-
+    def parse(self, string, parseAll=True):
+        return self.term.parseString(string, parseAll)
 
 def cleanrun(fn):
     def decorator(*args, **kwargs):
