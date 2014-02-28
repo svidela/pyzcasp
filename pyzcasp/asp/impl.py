@@ -112,14 +112,14 @@ def grammar():
     terms = pypa.delimitedList(term)
     integer = pypa.Combine(pypa.Optional(pypa.Literal('+') ^ pypa.Literal('-')) + pypa.Word(pypa.nums))
     # TODO: the string '_' should not be accepted
-    function = pypa.Word(pypa.alphas + '_', pypa.alphanums + '_') + pypa.Group(pypa.Optional(lp + pypa.Optional(terms) + rp))
+    function = pypa.Word(pypa.alphas + '_', pypa.alphanums + '_')("pred") + pypa.Group(pypa.Optional(lp + pypa.Optional(terms) + rp))("args")
     
     # default actions:
     #  - convert integers
     #  - convert predicates/functions and constants (predicate or function without args)
     #  - remove quotes from strings
     integer.setParseAction(lambda s,l,t: int(t[0]))
-    function.setParseAction(lambda s,l,t: Term(t[0],t[1]))
+    function.setParseAction(lambda s,l,t: Term(t['pred'],t['args']))
     pypa.quotedString.setParseAction(pypa.removeQuotes)
     
     # complete the recursive definition started with Forward
