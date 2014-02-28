@@ -50,88 +50,15 @@ class TermSetAdapter(object):
     def __len__(self):
         return len(self._termset)
         
-class ParserAdapter(object):
-    interface.implements(IParser)
-    
-    def __init__(self, lexer):
-        super(ParserAdapter, self).__init__()
-        
-        self.lex = lexer
-        self.parser = yacc.yacc(module=self, debug=0, optimize=1)
-        
-    def parse(self, exp):
-        return self.parser.parse(exp, lexer=self.lex.lexer)
-        
-    def __enter__(self):
-        return self
-        
-    def __exit__(self, type, value, traceback):        
-        if os.path.isfile("parsetab.py"): 
-            os.remove("parsetab.py")
-            
-        if os.path.isfile("parsetab.pyc"): 
-            os.remove("parsetab.pyc")
-                    
-    def p_error(self, t):
-        raise SyntaxError(str(t))
-
-
-class Lexer2TermSetParser(ParserAdapter):
-    component.adapts(ILexer)
-    interface.implements(ITermSetParser)
-    
-    def __init__(self, lexer):
-        self.tokens = (lexer.STRING, lexer.IDENT, lexer.MIDENT, lexer.NUM, lexer.LP, lexer.RP, lexer.COMMA)
-        self.start = 'atom'
-        super(Lexer2TermSetParser, self).__init__(lexer)        
-        
-    def __dir__(self):
-        return ['p_atom', 'p_error', 'p_term', 'p_terms', 'start', 'tokens']
-                
-    def p_atom(self, t):
-        """atom : IDENT LP terms RP
-                | IDENT
-                | MIDENT LP terms RP
-                | MIDENT
-        """
-        if len(t) == 2:
-            t[0] = Term(t[1])
-        elif len(t) == 5:
-            t[0] = Term(t[1], t[3])
-
-    def p_terms(self, t):
-        """terms : term COMMA terms
-                 | term
-        """
-        if len(t) == 2:
-            t[0] = [t[1]]
-        else:
-            t[0] = [t[1]] + t[3]
-
-    def p_term(self, t):
-        """term : IDENT LP terms RP
-                | STRING
-                | IDENT
-                | NUM
-        """
-        if len(t) == 2:
-            if re.match(self.lex.t_NUM, t[1]):
-                t[0] = int(t[1])
-            elif re.match(self.lex.t_STRING, t[1]):
-                t[0] = t[1][1:-1]
-            else:
-                t[0] = Term(t[1])
-        else:
-            t[0] = Term(t[1], t[3])
-
 class AnswerSet2TermSet(TermSetAdapter):
-    component.adapts(IAnswerSet, ITermSetParser)
+    component.adapts(IAnswerSet)
     
-    def __init__(self, answer, parser):
+    def __init__(self, answer):
         super(AnswerSet2TermSet, self).__init__()
-        
+        parser = Grammar()
         for atom in answer.atoms:
-            self._termset.add(parser.parse(atom))
+            # raise pyparsing.ParseException if cannot parse
+            self._termset.add(parser.parse(atom)[0])
         
         self._termset.score = answer.score
 
@@ -162,16 +89,14 @@ class AnswerSetsProcessing(object):
         
     def processing(self, adapter=None, termset_filter=None):
         ans = []
-        with Lexer() as lexer:
-            with ITermSetParser(lexer) as parser:        
-                for answer in self.solver.answers():
-                    ts = component.getMultiAdapter((answer, parser), ITermSet)
-                    if termset_filter:
-                        ts = TermSet(filter(termset_filter, ts), ts.score)
-                        
-                    if adapter:
-                        ans.append(adapter(ts))
-                    else:
-                        ans.append(ts)
-        
+        for answer in self.solver.answers():
+            if adapter:
+                ans.append(adapter(answer))
+            else:
+                ts = ITermSet(answer)
+                if termset_filter:
+                    ts = TermSet(filter(termset_filter, ts), ts.score)
+                    
+                ans.append(ts)
+
         return ans

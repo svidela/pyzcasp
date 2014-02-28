@@ -42,7 +42,7 @@ setup(name='pyzcasp',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          "ply",
+          "pyparsing>=1.5.7,<2.0.0", #latest pyparsing version for Python 2.x
           "zope.component",
           "zope.interface"
       ],

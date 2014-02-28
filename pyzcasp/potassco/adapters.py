@@ -20,26 +20,27 @@ from pyzcasp import asp
 from interfaces import *
 from impl import *
 
-
 class MetaAnswerSet2TermSet(asp.TermSetAdapter):
-    component.adapts(IMetaAnswerSet, asp.ITermSetParser)
+    component.adapts(IMetaAnswerSet)
     
-    def __init__(self, answer, parser):
+    def __init__(self, answer):
         super(MetaAnswerSet2TermSet, self).__init__()
         
+        parser, fun, num = asp.grammar()
         for atom in answer.atoms:
-            meta = parser.parse(atom)
+            # raise pyparsing.ParseException if cannot parse
+            meta = parser.parseString(atom, True)[0]
             self._termset.add(meta.arg(0).arg(0))
-        
-        self._termset.score = answer.score
 
-class MetaGrounderSolver(asp.GrounderSolver):
+        self._termset.score = answer.score
+        
+class MetaGrounderSolver(object):
     component.adapts(IGringo3, IClaspDSolver)
     interface.implements(IMetaGrounderSolver)
     
-    
     def __init__(self, grounder, solver):
-        super(MetaGrounderSolver, self).__init__(grounder, solver)
+        super(MetaGrounderSolver, self).__init__()
+        self.solver   = solver
         self.grounder = grounder
         self.optimize = asp.TermSet()
         
@@ -54,30 +55,20 @@ class MetaGrounderSolver(asp.GrounderSolver):
         metaD = encodings('potassco.metaD')
         metaO = encodings('potassco.metaO')
         
-        metasp = [meta, metaD, metaO, self.optimize.to_file()]
-        return super(MetaGrounderSolver, self).run(grounding + lp, grounder_args=metasp, solver_args=solver_args, 
-                                                   adapter=adapter, termset_filter=termset_filter)
-
-class AnswerSetsProcessing(object):
-    component.adapts(IClaspDSolver)
-    interface.implements(asp.IAnswerSetsProcessing)
-    
-    def __init__(self, solver):
-        self.solver = solver
+        metasp = ['-', meta, metaD, metaO, self.optimize.to_file()]        
+        grounding, code = self.grounder.execute(grounding + lp, *metasp)
+        self.solver.execute(grounding, *solver_args)
         
-    def processing(self, adapter=None, termset_filter=None):
         ans = []
-        with asp.Lexer() as lexer:
-            with asp.ITermSetParser(lexer) as parser:
-                for answer in self.solver.answers():
-                    interface.directlyProvides(answer, IMetaAnswerSet)
-                    ts = component.getMultiAdapter((answer, parser), asp.ITermSet)
-                    if termset_filter:
-                        ts = TermSet(filter(termset_filter, ts), ts.score)
-                        
-                    if adapter:
-                        ans.append(adapter(ts))
-                    else:
-                        ans.append(ts)
-        
+        for answer in self.solver.answers():
+            interface.directlyProvides(answer, IMetaAnswerSet)
+            if adapter:
+                ans.append(adapter(answer))
+            else:
+                ts = asp.ITermSet(answer)
+                if termset_filter:
+                    ts = TermSet(filter(termset_filter, ts), ts.score)
+                    
+                ans.append(ts)
+
         return ans

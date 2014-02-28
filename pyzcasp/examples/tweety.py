@@ -36,22 +36,23 @@ class BirdList2TermSet(asp.TermSetAdapter):
             if bird.penguin:
                 self._termset.add(asp.Term('penguin', [bird.name]))
 
-class TermSet2BirdList(list):
-    component.adapts(asp.ITermSet)
+class AnswerSet2BirdList(list):
+    component.adapts(asp.IAnswerSet)
     interface.implements(IBirdList)
     
-    def __init__(self, termset):
-        super(TermSet2BirdList, self).__init__()
-        for term in termset:
-            assert(term.pred == 'flies')
-            self.append(Bird(term.arg(0)))
+    def __init__(self, answer):
+        super(AnswerSet2BirdList, self).__init__()
+
+        parser = asp.Grammar()
+        parser.function.setParseAction(lambda t: self.append(Bird(t['args'][0])))
+        [parser.parse(atom) for atom in answer.atoms]
 
 ## Registry (usually in __init__.py)
 gsm = component.getGlobalSiteManager()
 path = os.path.dirname(examples.__file__)
 
 gsm.registerAdapter(BirdList2TermSet)
-gsm.registerAdapter(TermSet2BirdList)
+gsm.registerAdapter(AnswerSet2BirdList)
 gsm.registerUtility(asp.EncodingRegistry(), asp.IEncodingRegistry, 'example')
 
 reg = component.getUtility(asp.IEncodingRegistry, 'example')

@@ -26,4 +26,9 @@ You can also provide an interface in order to adapt each answer set::
     >>> sorted(solutions, key=lambda o: o.score)
     [10, 12]
     
-An adapter from ``ITermSet`` to ``IScore`` must be registered beforehand (see groundersolver_fixt.py).
+An adapter from ``asp.IAnswerSet`` to ``IScore`` must be registered beforehand (see groundersolver_fixt.py).
+
+    >>> solutions = grover.run(adapter=INoAdapter)
+    Traceback (most recent call last):
+    ...
+    TypeError: ('Could not adapt', <pyzcasp.asp.impl.AnswerSet object at ...>, <InterfaceClass groundersolver_fixt.INoAdapter>)

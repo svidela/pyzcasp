@@ -18,7 +18,7 @@
 
 import os, tempfile
 from zope import component
-from ply import lex
+import pyparsing as pypa
 import re
 
 from interfaces import *
@@ -103,52 +103,32 @@ class AnswerSet(object):
         self.atoms = atoms
         self.score = score
         
-class Lexer(object):
-    interface.implements(ILexer)
-    
-    STRING  = 'STRING'
-    IDENT   = 'IDENT'
-    MIDENT  = 'MIDENT'
-    NUM     = 'NUM'
-    LP      = 'LP'
-    RP      = 'RP'
-    COMMA   = 'COMMA'
-    SPACE   = 'SPACE'
-
-    # Tokens
-    t_STRING = r'"[^"\\]*(?:\\.[^"\\]*)*"' #r'"((\\")|[^"])*"'
-    t_IDENT = r'[a-zA-Z_][a-zA-Z0-9_]*'
-    t_MIDENT = r'-[a-zA-Z_][a-zA-Z0-9_]*'
-    t_NUM = r'-?[0-9]+'
-    t_LP = r'\('
-    t_RP = r'\)'
-    t_COMMA = r','
-    t_SPACE = r'[ \t\.]+'
-
-    tokens = (STRING, IDENT, MIDENT, NUM, LP, RP, COMMA, SPACE)
+class Grammar(object):
     
     def __init__(self):
-        super(Lexer, self).__init__()
-        self.lexer = lex.lex(object=self, optimize=1)
-        
-    def __enter__(self):
-        return self
-        
-    def __exit__(self, type, value, traceback):
-        if os.path.isfile("lextab.py"):
-            os.remove("lextab.py")
-            
-        if os.path.isfile("lextab.pyc"):
-            os.remove("lextab.pyc")
-        
-    def t_newline(self, t):
-        r'\n+'
-        t.lexer.lineno += t.value.count("\n")
+        lp = pypa.Suppress(pypa.Literal("("))
+        rp = pypa.Suppress(pypa.Literal(")"))
+    
+        # used for recursive definition in `function` Token below
+        self.term = pypa.Forward()
+        terms = pypa.delimitedList(self.term)
+        self.integer = pypa.Combine(pypa.Optional(pypa.Literal('+') ^ pypa.Literal('-')) + pypa.Word(pypa.nums))
+        # TODO: the string '_' should not be accepted
+        self.function = pypa.Word(pypa.alphas + '_', pypa.alphanums + '_')("pred") + pypa.Group(pypa.Optional(lp + pypa.Optional(terms) + rp))("args")
+    
+        # default actions:
+        #  - convert integers
+        #  - convert predicates/functions and constants (predicate or function without args)
+        #  - remove quotes from strings
+        self.integer.setParseAction(lambda s,l,t: int(t[0]))
+        self.function.setParseAction(lambda s,l,t: Term(t['pred'],t['args']))
+        pypa.quotedString.setParseAction(pypa.removeQuotes)
+    
+        # complete the recursive definition started with Forward
+        self.term << (self.function ^ self.integer ^ pypa.quotedString)
 
-    def t_error(self, t):
-        print "Illegal character '%s'" % t.value[0]
-        t.lexer.skip(1)
-
+    def parse(self, string, parseAll=True):
+        return self.term.parseString(string, parseAll)
 
 def cleanrun(fn):
     def decorator(*args, **kwargs):
