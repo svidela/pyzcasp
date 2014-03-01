@@ -29,7 +29,7 @@ class MetaAnswerSet2TermSet(asp.TermSetAdapter):
         parser = asp.Grammar()
         for atom in answer.atoms:
             # raise pyparsing.ParseException if cannot parse
-            meta = parser.parse(atom)[0]
+            meta = parser.parse(atom)
             self._termset.add(meta.arg(0).arg(0))
 
         self._termset.score = answer.score
