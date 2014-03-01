@@ -36,7 +36,7 @@ class BirdList2TermSet(asp.TermSetAdapter):
             if bird.penguin:
                 self._termset.add(asp.Term('penguin', [bird.name]))
 
-class AnswerSet2BirdList(list):
+class AnswerSet2BirdList(object):
     component.adapts(asp.IAnswerSet)
     interface.implements(IBirdList)
     
@@ -45,7 +45,10 @@ class AnswerSet2BirdList(list):
 
         parser = asp.Grammar()
         parser.function.setParseAction(lambda t: Bird(t['args'][0]))
-        [self.append(parser.parse(atom)) for atom in answer.atoms]
+        self.birds = BirdList([parser.parse(atom) for atom in answer.atoms])
+        
+    def __iter__(self):
+        return iter(self.birds)
 
 ## Registry (usually in __init__.py)
 gsm = component.getGlobalSiteManager()
