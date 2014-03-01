@@ -128,8 +128,8 @@ class Grammar(object):
         # complete the recursive definition started with Forward
         self.term << (self.function ^ self.integer ^ pypa.quotedString)
 
-    def parse(self, string, parseAll=True):
-        return self.term.parseString(string, parseAll)
+    def parse(self, atom, parseAll=True):
+        return self.term.parseString(atom, parseAll)[0]
 
 def cleanrun(fn):
     def decorator(*args, **kwargs):

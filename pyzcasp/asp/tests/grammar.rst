@@ -8,7 +8,7 @@ First we get the grammar for parsing atoms::
 
 Next, we can parse a string as returned by ASP solvers::
     
-    >>> atom1 = parser.parse('predicate(6,"string",1,term,nested(1,2))')[0]
+    >>> atom1 = parser.parse('predicate(6,"string",1,term,nested(1,2))')
 
 By default, the parser will return a ``Term`` object::
 
@@ -23,7 +23,7 @@ But also, we can add custom parse actions (see pyparsing docs). To do it, we can
 
     >>> f = []
     >>> r = parser.function.addParseAction(lambda t: f.append(t[0].pred))
-    >>> atom2 = parser.parse('predicate(6,"string",1,term,nested(1,2))')[0]
+    >>> atom2 = parser.parse('predicate(6,"string",1,term,nested(1,2))')
     >>> f
     ['term', 'nested', 'predicate']
     
@@ -42,10 +42,8 @@ Instead, if we use ``setParseAction`` we can access directly to ParseResult obje
     
 But the final result is no longer a ``Term`` object::
     
-    >>> atom3[0]
+    >>> atom3
     'predicate'
-    >>> atom3[1].asList()
-    [6, 'string', 1, 'term', [], 'nested', [1, 2]]
 
 Next, with the token object for numbers::
 

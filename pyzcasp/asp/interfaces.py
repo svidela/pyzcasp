@@ -116,18 +116,18 @@ class IGrammar(interface.Interface):
     Grammar pyparsing object
     """
     
-    term = interface.Attribute("token object for term")
-    function = interface.Attribute("token object for a function (including constant)")
+    function = interface.Attribute("token object for a function (including constant). Resulting object has 'pred' (str) and 'args' (list) keywords")
     integer = interface.Attribute("token object for an integer")
+    term = interface.Attribute("token object for term: function, integer or quoted string")
     
-    def parse(self, string, parseAll=True):
+    def parse(self, atom, parseAll=True):
         """
-        Parse a string using self.term.parseString
+        Parse an atom using self.term.parseString
         
-        :param str string: string representation of a term
+        :param str atom: string representation of an atom (more precisely, a term)
         :param bool parseAll: True to force parsing all the string, False otherwise
         
-        :return: pyparsing.ParseResult object
+        :return: by default a Term object. It may change if you modify use setParseAction
         """
     
 class IProcess(interface.Interface):

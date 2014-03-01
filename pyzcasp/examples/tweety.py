@@ -44,8 +44,8 @@ class AnswerSet2BirdList(list):
         super(AnswerSet2BirdList, self).__init__()
 
         parser = asp.Grammar()
-        parser.function.setParseAction(lambda t: self.append(Bird(t['args'][0])))
-        [parser.parse(atom) for atom in answer.atoms]
+        parser.function.setParseAction(lambda t: Bird(t['args'][0]))
+        [self.append(parser.parse(atom)) for atom in answer.atoms]
 
 ## Registry (usually in __init__.py)
 gsm = component.getGlobalSiteManager()
