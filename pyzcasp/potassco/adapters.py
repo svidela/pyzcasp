@@ -67,7 +67,7 @@ class MetaGrounderSolver(object):
             else:
                 ts = asp.ITermSet(answer)
                 if termset_filter:
-                    ts = TermSet(filter(termset_filter, ts), ts.score)
+                    ts = asp.TermSet(filter(termset_filter, ts), ts.score)
                     
                 ans.append(ts)
 
