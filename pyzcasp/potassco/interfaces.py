@@ -49,17 +49,27 @@ class IClasp3(IClaspSolver):
     clasp 3 series
     """
 
-class IClaspHSolver(IClaspSolver):
+class IHeuristicSolver(IClaspSolver):
+    """
+    domain heuristic solver
+    """
+
+class IDisjunctiveSolver(IClaspSolver):
+    """
+    disjunctive solver
+    """
+
+class IHClasp(IHeuristicSolver):
     """
     hclasp solver
     """
-
-class IClaspDSolver(IClaspSolver):
+    
+class IClaspD(IDisjunctiveSolver):
     """
     claspD solver
     """
     
-class IClaspSubsetMinimalSolver(asp.ISubsetMinimalSolver):
+class ISubsetMinimalSolver(asp.ISubsetMinimalSolver):
     """
     Marker interface for clasp subset minimal solver
     """

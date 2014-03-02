@@ -120,20 +120,20 @@ class Clasp2(ClaspSolver):
         if 'Opt' in answer:
             return answer['Opt']
                 
-class ClaspHSolver(Clasp2):
-    interface.implements(IClaspHSolver, IClaspSubsetMinimalSolver)
+class HClasp(Clasp2):
+    interface.implements(IHClasp, ISubsetMinimalSolver)
     
     def __filteratoms__(self, atoms):
         return filter(lambda atom: not atom.startswith('_'), atoms)
     
-class ClaspDSolver(Clasp2):
-    interface.implements(IClaspDSolver, IClaspSubsetMinimalSolver)
+class ClaspD(Clasp2):
+    interface.implements(IClaspD, ISubsetMinimalSolver)
     
     def __getstats__(self):
         return self.json['Models']
 
 class Clasp3(ClaspSolver):
-    interface.implements(IClasp3)
+    interface.implements(IClasp3, IHeuristicSolver, IDisjunctiveSolver)
 
     def answers(self):
         for call in xrange(self.calls):
