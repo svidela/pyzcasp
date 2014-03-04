@@ -34,3 +34,26 @@ reg = component.getUtility(asp.IEncodingRegistry)
 reg.register('potassco.meta',  os.path.join(root, 'encodings/meta.lp'),  IGringo3)
 reg.register('potassco.metaD', os.path.join(root, 'encodings/metaD.lp'), IGringo3)
 reg.register('potassco.metaO', os.path.join(root, 'encodings/metaO.lp'), IGringo3)
+
+def configure(**kwargs):
+    gsm = component.getGlobalSiteManager()
+    if 'gringo3' in kwargs:
+        gsm.registerUtility(Gringo3(kwargs['gringo3']), IGringo3)
+        
+    if 'gringo4' in kwargs:
+        gsm.registerUtility(Gringo4(kwargs['gringo4']), IGringo4)
+
+    if 'clasp2' in kwargs:
+        gsm.registerUtility(Clasp2(kwargs['clasp2']),   IClasp2)
+    
+    if 'hclasp' in kwargs:
+        gsm.registerUtility(HClasp(kwargs['hclasp']),   IHClasp)
+        
+    if 'claspD' in kwargs:
+        gsm.registerUtility(ClaspD(kwargs['claspD']),   IClaspD)
+
+    if 'clasp3' in kwargs:
+        gsm.registerUtility(Clasp3(kwargs['clasp3']),   IClasp3)
+    
+    if 'clingo' in kwargs:
+        gsm.registerUtility(Clingo(kwargs['clingo']),   IClingo)

@@ -36,13 +36,8 @@ if __name__ == '__main__':
     gsm = component.getGlobalSiteManager()
 
     if args.gringo_series == 3:
-        grounder = potassco.Gringo3(args.gringo)
-        gsm.registerUtility(grounder, potassco.IGringo3)
+        potassco.configure(gringo3=args.gringo, clasp2=args.clasp)    
     else:
-        grounder = potassco.Gringo4(args.gringo)
-        gsm.registerUtility(grounder, potassco.IGringo4)
-    
-    solver = potassco.Clasp2(args.clasp)
-    gsm.registerUtility(solver, potassco.IClasp2)
+        potassco.configure(gringo4=args.gringo, clasp2=args.clasp)
     
     main(args)

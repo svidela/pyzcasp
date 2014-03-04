@@ -78,7 +78,7 @@ def runner(birds):
     
 if __name__ == '__main__':
     # first thing you would do is to register clingo utility
-    gsm.registerUtility(potassco.Clingo("clingo"), potassco.IClingo)
+    potassco.configure(clingo="clingo")
     
     # tweety and sam are birds, sam is a penguin
     tweety = Bird('tweety')
