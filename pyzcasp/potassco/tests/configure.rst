@@ -8,6 +8,7 @@ Call to configure helper::
     >>> potassco.configure(gringo3="fake", gringo4="fake", clasp2="fake", clasp3="fake", hclasp="fake", claspD="fake", clingo="fake")
     
 Let's get the utilities now.
+
 - Gringo3::
 
     >>> component.getUtility(potassco.IGringo3)
