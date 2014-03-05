@@ -187,7 +187,8 @@ class IAnswerSet(interface.Interface):
     An plain answer set
     """
     
-    atoms = interface.Attribute("Set of atoms as strings")
+    atoms = interface.Attribute("Atoms as strings")
+    score = interface.Attribute("Answer set scores or costs")
     
 class IGrounderSolver(interface.Interface):
     """
@@ -220,46 +221,79 @@ class IAnswerSetsProcessing(interface.Interface):
 
 class IEncodingRegistry(interface.Interface):
     """
+    Registry of ASP encodings
     """
     
     def register(self, name, path, igrounder):
-        """"""
+        """
+        Register an encoding by name
+        
+        :param str name: the name to identify the encoding
+        :param str path: full path to encoding file
+        :param IGrounder igrounder: grounder type for the encoding, e.g., IGringo3 or IGringo4
+        """
         
     def encodings(self, igrounder):
-        """"""
+        """
+        Return a function to get encodings paths registered for a given grounder
+        
+        :param IGrounder igrounder: grounder type
+        :return: a function to be called with an encoding name as only parameter. It returns the registered path
+        """
 
 class IEncoding(interface.Interface):
     """
+    Marker interface for encodings
     """
     
 
 class IArgumentRegistry(interface.Interface):
     """
+    Registry for process arguments
     """
     
     def register(self, name, args, iprocess):
-        """"""
+        """
+        Register a list of arguments by name
         
-    def encodings(self, iprocess):
-        """"""
+        :param str name: the name to identify the list of args
+        :param list args: the list of arguments
+        :param IProcess iprocess: process type, e.g., IClasp2 or IClasp3
+        """
+        
+    def arguments(self, iprocess):
+        """
+        Return a function to get arguments registered for a given process
+        
+        :param IProcess iprocess: process type, e.g., IClasp2 or IClasp3
+        :return: a function to be called with an arguments name as only parameter. It returns the registered list of arguments
+        """
 
 class IArgument(interface.Interface):
     """
+    Marker interface for a process argument
     """
     
 class ICleaner(interface.Interface):
     """
+    Cleaner for tmp files generated during grounding&solving
     """
     
     def collect_file(self, filename):
-        """"""
+        """
+        Collect a tmp file to be deleted afterwards
+        """
         
     def clean_files(self):
-        """"""
+        """
+        Remove all collected file since last call
+        """
         
 class IProcessError(interface.Interface):
     """
+    Exception used by Process
     """
+    
     prg = interface.Attribute("")
     code = interface.Attribute("")
     stdout = interface.Attribute("")
