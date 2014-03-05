@@ -172,20 +172,9 @@ class ISolver(IProcess):
     sat = interface.Attribute("True if the solving was SAT, False otherwise")
     optimum = interface.Attribute("True if the solving found an optimum, False otherwise")
     
-    def __getstats__(self):
+    def answers(self):
         """
-        """
-        
-    def __getatoms__(self, answer):
-        """
-        """
-        
-    def __getscore__(self, answer):
-        """
-        """
-        
-    def __filteratoms__(self, atoms):
-        """
+        Iterator over AnswerSet objects
         """
         
 class ISubsetMinimalSolver(interface.Interface):

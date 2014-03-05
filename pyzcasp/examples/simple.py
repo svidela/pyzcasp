@@ -27,17 +27,8 @@ if __name__ == '__main__':
                         
     parser.add_argument("--gringo", dest="gringo", default="gringo",
                         help="gringo grounder binary (Default to 'gringo')", metavar="G")
-                        
-    parser.add_argument("--gringo-series", dest="gringo_series", type=int, default=3, choices=[3,4],
-                        help="gringo grounder binary (Default to 'gringo')", metavar="G")
-                        
+                                                
     args = parser.parse_args()
-    
-    gsm = component.getGlobalSiteManager()
-
-    if args.gringo_series == 3:
-        potassco.configure(gringo3=args.gringo, clasp2=args.clasp)    
-    else:
-        potassco.configure(gringo4=args.gringo, clasp2=args.clasp)
+    potassco.configure(gringo4=args.gringo, clasp3=args.clasp)
     
     main(args)

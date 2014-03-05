@@ -55,21 +55,6 @@ class ClaspSolver(asp.Process):
                 raise e
         
         return stdout, code
-        
-    def answers(self):
-        witnesses = self.__getwitnesses__()
-        if not witnesses:
-            return
-        
-        for answer in witnesses:
-            atoms = self.__filteratoms__(self.__getatoms__(answer))
-            score = self.__getscore__(answer)
-            if score:
-                ans = asp.AnswerSet(atoms, score)
-            else:
-                ans = asp.AnswerSet(atoms)
-            
-            yield ans
                 
     @property
     def unknown(self):
@@ -86,17 +71,36 @@ class ClaspSolver(asp.Process):
     @property
     def optimum(self):
         return self.json['Result'] == "OPTIMUM FOUND"
-                        
-    def __filteratoms__(self, atoms):
-        return atoms
-        
-class Clasp2(ClaspSolver):
-    interface.implements(IClasp2)
         
     @property
     def complete(self):
+        raise NotImplementedError("complete property depends on specific solver series output")
+            
+class Clasp2(ClaspSolver):
+    interface.implements(IClasp2)
+
+    @property
+    def complete(self):
         return self.__getstats__()['Complete'] == "yes"
+
+    def answers(self):
+        witnesses = self.__getwitnesses__()
+        if not witnesses:
+            return
+        
+        for answer in witnesses:
+            atoms = self.__filteratoms__(self.__getatoms__(answer))
+            score = self.__getscore__(answer)
+            if score:
+                ans = asp.AnswerSet(atoms, score)
+            else:
+                ans = asp.AnswerSet(atoms)
+            
+            yield ans
     
+    def __filteratoms__(self, atoms):
+        return atoms
+        
     def __getwitnesses__(self):
         if 'Witnesses' not in self.json:
             return
@@ -135,27 +139,27 @@ class ClaspD(Clasp2):
 class Clasp3(ClaspSolver):
     interface.implements(IClasp3, IHeuristicSolver, IDisjunctiveSolver)
 
+    @property
+    def complete(self):
+        return self.json['Models']['More'] == "no"
+        
+    @property
+    def calls(self):
+        return self.json['Calls']
+
     def answers(self):
         for call in xrange(self.calls):
             witnesses = self.__getwitnesses__(call)
             if witnesses:
                 for answer in witnesses:
-                    atoms = self.__filteratoms__(self.__getatoms__(answer))
-                    score = self.__getscore__(answer)
+                    atoms = answer['Value'] if 'Value' in answer else []
+                    score = answer['Costs'] if 'Costs' in answer else None
                     if score:
                         ans = asp.AnswerSet(atoms, score)
                     else:
                         ans = asp.AnswerSet(atoms)
             
                     yield ans
-
-    @property
-    def complete(self):
-        return self.__getstats__()['More'] == "no"
-        
-    @property
-    def calls(self):
-        return self.json['Calls']
 
     def __getwitnesses__(self, call=None):
         if call == None:
@@ -165,20 +169,7 @@ class Clasp3(ClaspSolver):
             return
         else:
             return self.json['Call'][call]['Witnesses']
-   
-    def __getstats__(self):
-        return self.json['Models']
-        
-    def __getatoms__(self, answer):
-        if 'Value' in answer:
-            return answer['Value']
-        else:
-            return []
-                    
-    def __getscore__(self, answer):
-        if 'Costs' in answer:
-            return answer['Costs']
-    
+       
 class Clingo(Clasp3):
     interface.implements(IClingo)
     

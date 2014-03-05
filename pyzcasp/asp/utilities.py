@@ -63,15 +63,6 @@ class Solver(Process):
     
     def answers(self):
         raise NotImplementedError("This is an abstract solver")
-        
-    def __getstats__(self):
-        raise NotImplementedError("This is an abstract solver")
-        
-    def __getatoms__(self, answer):
-        raise NotImplementedError("This is an abstract solver")
-        
-    def __filteratoms__(self, atoms):
-        raise NotImplementedError("This is an abstract solver")
 
 class Grounder(Process):
     interface.implements(IGrounder)

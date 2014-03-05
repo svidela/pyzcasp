@@ -38,17 +38,44 @@ class IClaspSolver(asp.ISolver):
     """
     clasp solver
     """
-    
+
 class IClasp2(IClaspSolver):
     """
     clasp 2 series
     """
+    
+    def __filteratoms__(self, atoms):
+        """
+        Return atoms after filter
+        """
 
+    def __getwitnesses__(self):
+        """
+        Return answer sets witnesses
+        """
+        
+    def __getstats__(self):
+        """
+        Return solver stats
+        """
+        
+    def __getatoms__(self, answer):
+        """
+        Return answer set atoms
+        """
+        
+    def __getscore__(self, answer):
+        """
+        Return answer set score(s)
+        """
+    
 class IClasp3(IClaspSolver):
     """
     clasp 3 series
     """
-
+    
+    calls = interface.Attribute("Number of solving calls")
+    
 class IHeuristicSolver(IClaspSolver):
     """
     domain heuristic solver
