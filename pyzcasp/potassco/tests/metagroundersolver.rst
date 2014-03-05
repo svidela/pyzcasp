@@ -5,7 +5,7 @@ Required imports::
 
 Multi-adapt a grounder and solver object::
 
-    >>> grover = component.getMultiAdapter((fake_gringo, fake_clasp), potassco.IMetaGrounderSolver)
+    >>> grover = component.getMultiAdapter((fake_gringo, fake_clasp), potassco.IMetaGrounderSolver, 'metasp')
     
 Next, use run with optional stdin and filter to be applied over each answer set::
 

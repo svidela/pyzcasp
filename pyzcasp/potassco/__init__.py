@@ -27,7 +27,7 @@ from zope import component
 gsm = component.getGlobalSiteManager()
 
 gsm.registerAdapter(MetaAnswerSet2TermSet)
-gsm.registerAdapter(MetaGrounderSolver)
+gsm.registerAdapter(MetaGrounderSolver, name='metasp')
 
 root = os.path.dirname(__file__)
 reg = component.getUtility(asp.IEncodingRegistry)
