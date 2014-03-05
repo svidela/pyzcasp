@@ -1,4 +1,5 @@
 recursive-include pyzcasp/potassco/encodings *.lp
+recursive-include pyzcasp/examples/encodings *.lp
 include LICENSE
 include CHANGES
 include README.md

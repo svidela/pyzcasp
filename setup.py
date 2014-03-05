@@ -44,7 +44,7 @@ setup(name='pyzcasp',
       author_email='santiago.videla@gmail.com',
       url='http://github.com/svidela/pyzcasp',
       license='GPLv3+',
-      packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+      packages=find_packages(exclude=['ez_setup', 'tests']),
       include_package_data=True,
       zip_safe=False,
       install_requires=[
