@@ -118,5 +118,6 @@ class IGrounderSolver(asp.IGrounderSolver):
     
 class IClingo(IGrounderSolver):
     """
+    clingo solver (grounder included)
     """
     
