@@ -19,7 +19,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.0.0dev'
+version = '1.0.0'
 
 long_desc = """
 This package provides a framework to build on top of Answer Set Programming tools using the Zope Component Architecture.
