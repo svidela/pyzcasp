@@ -17,7 +17,6 @@
 # -*- coding: utf-8 -*-
 
 from zope import component
-from ply import yacc
 
 import re, os
 
