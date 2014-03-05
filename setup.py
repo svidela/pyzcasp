@@ -21,11 +21,17 @@ import sys, os
 
 version = '1.0.0dev'
 
+long_desc = """
+This package provides a framework to build on top of Answer Set Programming tools using the Zope Component Architecture.
+For more details on available features and usage, visit the `GitHub repository`_.
+
+.. _`github repository`: http://github.com/svidela/pyzcasp
+
+"""
 setup(name='pyzcasp',
       version=version,
       description="Python + Zope Component Architecture framework for Answer Set Programming",
-      long_description="""\
-""",
+      long_description=long_desc + open('CHANGES').read(),
       classifiers=[
           "Intended Audience :: Science/Research",
           "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
