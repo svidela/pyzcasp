@@ -11,7 +11,7 @@ The corresponding binaries for each tool must be installed manually. Note that, 
 
 
 Additional features include:
-- function decorator to avoid tmp files leftovers
+- Function decorator to avoid tmp files leftovers
 - Utility to register and recover encodings by name and specific grounder
 - Utility to register and recover arguments by name and specific system (grounder or solver)
 - Adapt answer sets by default to a basic python object
