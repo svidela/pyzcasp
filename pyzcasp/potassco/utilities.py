@@ -56,6 +56,9 @@ class ClaspSolver(asp.Process):
         
         return stdout, code
                 
+    def answers(self):
+        raise NotImplementedError("iterator over answer sets depends on specific solver series output")
+        
     @property
     def unknown(self):
         return self.json['Result'] == "UNKNOWN"
@@ -85,18 +88,16 @@ class Clasp2(ClaspSolver):
 
     def answers(self):
         witnesses = self.__getwitnesses__()
-        if not witnesses:
-            return
-        
-        for answer in witnesses:
-            atoms = self.__filteratoms__(self.__getatoms__(answer))
-            score = self.__getscore__(answer)
-            if score:
-                ans = asp.AnswerSet(atoms, score)
-            else:
-                ans = asp.AnswerSet(atoms)
+        if witnesses:          
+            for answer in witnesses:
+                atoms = self.__filteratoms__(self.__getatoms__(answer))
+                score = self.__getscore__(answer)
+                if score:
+                    ans = asp.AnswerSet(atoms, score)
+                else:
+                    ans = asp.AnswerSet(atoms)
             
-            yield ans
+                yield ans
     
     def __filteratoms__(self, atoms):
         return atoms
