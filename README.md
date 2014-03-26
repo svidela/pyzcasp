@@ -7,7 +7,7 @@ Currently **pyzcasp** supports the usage of most common tools from [Potassco](ht
 - [hclasp](https://sourceforge.net/projects/potassco/files/hclasp/)
 - [claspD-2](http://www.cs.uni-potsdam.de/claspD/)
 
-The corresponding binaries for each tool must be installed manually. Note that, latest _clingo_, _gringo_ and _clasp_ are available in [Debian](http://www.debian.org), [Ubuntu](http://www.ubuntu.com), [Arch Linux (AUR)](https://aur.archlinux.org/) and [Mac OS X (homebrew)](http://brew.sh/). Moreover, depending on your system, pre-compiled binaries might be available in the links above.
+The corresponding binaries for each tool must be installed manually. Note that, _clingo_, _gringo_ and _clasp_ are available in [Debian](http://www.debian.org), [Ubuntu](http://www.ubuntu.com), [Arch Linux (AUR)](https://aur.archlinux.org/) and [Mac OS X (homebrew)](http://brew.sh/). Moreover, depending on your system, pre-compiled binaries might be available in the links above.
 
 
 Additional features include:
