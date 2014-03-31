@@ -1,5 +1,29 @@
 This package provides a python framework to build on top of Answer Set Programming tools using the [Zope Component Architecture](http://muthukadan.net/docs/zca.html).
 
+### Install
+
+```
+$ pip install pyzcasp
+```
+
+### Usage
+```
+In [1]: from pyzcasp import potassco
+In [2]: clingo = potassco.Clingo("clingo") # path to clingo binary
+In [3]: answers = clingo.run("{a(1..k)}.",
+   ...:                      grounder_args=["-c k=2"], solver_args=["-n0"])
+In [4]: for ans in answers:
+   ...:     print [(str(t), t.pred, t.arg(0)) for t in ans]
+   ...:
+[]
+[('a(2)', u'a', 2)]
+[('a(1)', u'a', 1)]
+[('a(1)', u'a', 1), ('a(2)', u'a', 2)]
+```
+
+Check out more interesting [examples](pyzcasp/examples) use cases. For a real application using **pyzcasp** take a look to [caspo](https://github.com/bioasp/caspo).
+
+
 Currently **pyzcasp** supports the usage of most common tools from [Potassco](http://potassco.sourceforge.net/):
 - [clingo](https://sourceforge.net/projects/potassco/files/clingo/) (series 4)
 - [gringo](https://sourceforge.net/projects/potassco/files/gringo/) (series 3 and 4)
@@ -7,7 +31,7 @@ Currently **pyzcasp** supports the usage of most common tools from [Potassco](ht
 - [hclasp](https://sourceforge.net/projects/potassco/files/hclasp/)
 - [claspD-2](http://www.cs.uni-potsdam.de/claspD/)
 
-The corresponding binaries for each tool must be installed manually. Note that, _clingo_, _gringo_ and _clasp_ are available in [Debian](http://www.debian.org), [Ubuntu](http://www.ubuntu.com), [Arch Linux (AUR)](https://aur.archlinux.org/) and [Mac OS X (homebrew)](http://brew.sh/). Moreover, depending on your system, pre-compiled binaries might be available in the links above.
+The corresponding binaries for each tool must be installed manually.
 
 
 Additional features include:
@@ -42,6 +66,3 @@ Run doctests using:
         
     OK
 ```
-
-Check out some [examples](pyzcasp/examples) use cases. For a real application using **pyzcasp** take a look to [caspo](https://github.com/bioasp/caspo).
-
