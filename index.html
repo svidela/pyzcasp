@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>pyzcasp by svidela</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>pyzcasp</h1>
+        <p>Python + Zope Component Architecture framework for Answer Set Programming</p>
+        <p class="view"><a href="https://github.com/svidela/pyzcasp">View the Project on GitHub <small>svidela/pyzcasp</small></a></p>
+        <ul>
+          <li><a href="https://github.com/svidela/pyzcasp/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/svidela/pyzcasp/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/svidela/pyzcasp">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>This package provides a python framework to build on top of Answer Set Programming tools using the <a href="http://muthukadan.net/docs/zca.html">Zope Component Architecture</a>.</p>
+
+<h3>
+<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h3>
+
+<pre><code>$ pip install pyzcasp
+</code></pre>
+
+<h3>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h3>
+
+<pre><code>In [1]: from pyzcasp import potassco
+In [2]: clingo = potassco.Clingo("clingo") # path to clingo binary
+In [3]: answers = clingo.run("{a(1..k)}.",
+   ...:                      grounder_args=["-c k=2"], solver_args=["-n0"])
+In [4]: for ans in answers:
+   ...:     print [(str(t), t.pred, t.arg(0)) for t in ans]
+   ...:
+[]
+[('a(2)', u'a', 2)]
+[('a(1)', u'a', 1)]
+[('a(1)', u'a', 1), ('a(2)', u'a', 2)]
+</code></pre>
+
+<p>Check out more interesting <a href="pyzcasp/examples">examples</a> use cases. For a real application using <strong>pyzcasp</strong> take a look to <a href="https://github.com/bioasp/caspo">caspo</a>.</p>
+
+<p>Currently <strong>pyzcasp</strong> supports the usage of most common tools from <a href="http://potassco.sourceforge.net/">Potassco</a>:</p>
+
+<ul>
+<li>
+<a href="https://sourceforge.net/projects/potassco/files/clingo/">clingo</a> (series 4)</li>
+<li>
+<a href="https://sourceforge.net/projects/potassco/files/gringo/">gringo</a> (series 3 and 4)</li>
+<li>
+<a href="https://sourceforge.net/projects/potassco/files/clasp/">clasp</a> (series 2 and 3)</li>
+<li><a href="https://sourceforge.net/projects/potassco/files/hclasp/">hclasp</a></li>
+<li><a href="http://www.cs.uni-potsdam.de/claspD/">claspD-2</a></li>
+</ul><p>The corresponding binaries for each tool must be installed manually.</p>
+
+<p>Additional features include:</p>
+
+<ul>
+<li>Function decorator to avoid tmp files leftovers</li>
+<li>Utility to register and recover encodings by name and specific grounder</li>
+<li>Utility to register and recover arguments by name and specific system (grounder or solver)</li>
+<li>Adapt answer sets by default to a basic python object</li>
+<li>Adapt answer sets to application-specific python objects</li>
+<li>Ready-to-use <a href="http://www.cs.uni-potsdam.de/wv/metasp/">metasp</a> framework</li>
+</ul><p>Run doctests using:</p>
+
+<pre><code>    $ nosetests --with-doctest --doctest-extension=rst --doctest-fixtures=_fixt --doctest-options='+NORMALIZE_WHITESPACE,+ELLIPSIS' --with-coverage --cover-package pyzcasp.asp --cover-package pyzcasp.potassco
+    ..............
+    Name                          Stmts   Miss  Cover   Missing
+    -----------------------------------------------------------
+    pyzcasp.asp                      12      0   100%
+    pyzcasp.asp.adapters             58      0   100%
+    pyzcasp.asp.impl                 91      1    99%   150
+    pyzcasp.asp.interfaces           62      0   100%
+    pyzcasp.asp.utilities            74     19    74%   36-59, 65
+    pyzcasp.potassco                 30      0   100%
+    pyzcasp.potassco.adapters        42      0   100%
+    pyzcasp.potassco.impl             0      0   100%
+    pyzcasp.potassco.interfaces      24      0   100%
+    pyzcasp.potassco.utilities      117     12    90%   45-57, 188, 194
+    -----------------------------------------------------------
+    TOTAL                           510     32    94%
+    ----------------------------------------------------------------------
+    Ran 14 tests in 0.342s
+
+    OK
+</code></pre>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/svidela">svidela</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
