@@ -20,6 +20,7 @@ import os, tempfile
 from zope import component
 import pyparsing as pypa
 import re
+from collections import defaultdict
 
 from interfaces import *
         
@@ -80,7 +81,7 @@ class TermSet(set):
         super(TermSet, self).__init__(terms)
         self.score = score
         
-    def to_file(self, filename=None):
+    def to_file(self, filename=None, pprint=False):
         if filename:
             file = open(filename,'w')
         else:
@@ -88,12 +89,40 @@ class TermSet(set):
             file = os.fdopen(fd,'w')
             cleaner = component.getUtility(ICleaner)
             cleaner.collect_file(filename)
-            
-        for term in self:
-            file.write(str(term) + '.\n')
-            
+
+        if pprint:
+            file.write(self.pprint())
+        else:
+            for term in self:
+                file.write(str(term) + '.\n')
+                
         file.close()
         return filename
+        
+    def pprint(self):
+        stream = ""
+        terms = defaultdict(dict)
+        for term in self:
+            nargs = len(term.args)
+            if nargs in terms[term.pred]:
+                terms[term.pred][nargs].append(term)
+            else:
+                terms[term.pred][nargs] = [term]
+        
+        for nargs in terms.itervalues():
+            for l in nargs.itervalues():
+                while len(l) >= 4:
+                    stream += "%s.\t%s.\t%s.\t%s.\n" %(str(l.pop()),str(l.pop()),str(l.pop()),str(l.pop()))
+                while l and len(l) % 3 == 0:
+                    stream += "%s.\t%s.\t%s.\n" %(str(l.pop()),str(l.pop()),str(l.pop()))
+                while l and len(l) % 2 == 0:
+                    stream += "%s.\t%s.\n" %(str(l.pop()),str(l.pop()))
+                while l:
+                    stream += "%s.\n" %(str(l.pop()))
+                    
+                stream += "\n"
+                
+        return stream
 
 class AnswerSet(object):
     interface.implements(IAnswerSet)
