@@ -40,6 +40,9 @@ class TermSetAdapter(object):
     def union(self, other):
         return self._termset.union(other)
                 
+    def to_str(self, pprint=False):
+        return self._termset.to_str(pprint)
+        
     def to_file(self, filename=None, pprint=False):
         return self._termset.to_file(filename, pprint)
         

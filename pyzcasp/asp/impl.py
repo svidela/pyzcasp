@@ -81,6 +81,12 @@ class TermSet(set):
         super(TermSet, self).__init__(terms)
         self.score = score
         
+    def to_str(self, pprint=False):
+        if pprint:
+            return self.pprint()
+        else:
+            return ".\n".join(map(str, self)) + "."
+        
     def to_file(self, filename=None, pprint=False):
         if filename:
             file = open(filename,'w')
@@ -90,12 +96,7 @@ class TermSet(set):
             cleaner = component.getUtility(ICleaner)
             cleaner.collect_file(filename)
 
-        if pprint:
-            file.write(self.pprint())
-        else:
-            for term in self:
-                file.write(str(term) + '.\n')
-                
+        file.write(self.to_str(pprint))        
         file.close()
         return filename
         

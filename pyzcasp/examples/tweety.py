@@ -69,7 +69,7 @@ def runner(birds):
     encodings = component.getUtility(asp.IEncodingRegistry).encodings(clingo.grounder) # get encodings for its grounder
     instance = asp.ITermSet(birds) # adapt the list of birds to a TermSet object
     #run clingo with an instance and encoding. Resulting answer sets are adapted to a list of birds
-    answers = clingo.run(grounder_args=[instance.to_file(), encodings('flies')], adapter=IBirdList)
+    answers = clingo.run(instance.to_str(), grounder_args=[encodings('flies')], adapter=IBirdList)
     if clingo.sat:
         # return the first list of birds
         return answers[0]

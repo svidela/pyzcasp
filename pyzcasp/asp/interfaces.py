@@ -78,13 +78,28 @@ class ITermSet(interface.Interface):
         :param list score: list of score(s)
         """
     
-    def to_file(self, filename=None):
+    def to_str(self, pprint=False):
+        """
+        Returns all terms converted to strings ending with a dot.
+        
+        :param boolean pprint: use pretty print.
+        :returns: the str of all terms.
+        """
+    
+    def to_file(self, filename=None, pprint=False):
         """
         Write terms to filename or temp file. If filename==None, the filename is collected
         in the ICleaner utility for a proper cleaning using @cleanrun decorator.
         
-        :param str filename: an optional filename
+        :param str filename: an optional filename.
         :returns: a file descriptor object.
+        """
+        
+    def pprint(self):
+        """
+        Simple pretty print user for debugging logic instances.
+        
+        :returns: a str formatted with appropriate tabs and breaklines.
         """
     
     def add(self, term):
