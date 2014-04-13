@@ -82,10 +82,13 @@ class TermSet(set):
         self.score = score
         
     def to_str(self, pprint=False):
-        if pprint:
-            return self.pprint()
+        if len(self):
+            if pprint:
+                return self.pprint()
+            else:
+                return ".\n".join(map(str, self)) + "."
         else:
-            return ".\n".join(map(str, self)) + "."
+            return ""
         
     def to_file(self, filename=None, pprint=False):
         if filename:
