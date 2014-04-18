@@ -1,4 +1,4 @@
-1.0.1 (unreleased)
+1.0.1 (2014-04-18)
 ------------------
 - Adds to_str and pprint methods to TermSet
 
