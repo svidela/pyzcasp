@@ -21,7 +21,7 @@ In [4]: for ans in answers:
 [('a(1)', u'a', 1), ('a(2)', u'a', 2)]
 ```
 
-Check out more interesting [examples](http://github.com/svidela/pyzcasp/tree/master/pyzcasp/examples) use cases. For a real application using **pyzcasp** take a look to [caspo](https://github.com/bioasp/caspo).
+Check out more interesting [examples](http://github.com/svidela/pyzcasp/tree/master/pyzcasp/examples) use cases.
 
 
 Currently **pyzcasp** supports the usage of most common tools from [Potassco](http://potassco.sourceforge.net/):
